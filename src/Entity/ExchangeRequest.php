@@ -33,13 +33,13 @@ class ExchangeRequest
      * @ORM\OneToOne(targetEntity = Enrolment::class, inversedBy = "requestedExchange", fetch = "EAGER")
      * @ORM\JoinColumn(name = "desired_enrolment_id", nullable = false, options = {"unsigned": true})
      */
-    private $desiredEnrolment;
+    private ?Enrolment $desiredEnrolment = null;
 
     /**
-     * @ORM\OneToOne(targetEntity = ExchangeRequest::class, inversedBy = "proposedExchange", fetch = "EAGER")
+     * @ORM\OneToOne(targetEntity = Enrolment::class, inversedBy = "proposedExchange", fetch = "EAGER")
      * @ORM\JoinColumn(name = "proposed_enrolment_id", nullable = false, options = {"unsigned": true})
      */
-    private $proposedEnrolment;
+    private ?Enrolment $proposedEnrolment = null;
 
 
 

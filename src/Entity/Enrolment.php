@@ -30,7 +30,7 @@ class Enrolment
     private ?ExchangeRequest $requestedExchange = null;
 
     /**
-     * @ORM\OneToOne(targetEntity=ExchangeRequest::class, mappedBy = "proposedEnrolment")
+     * @ORM\OneToOne(targetEntity = ExchangeRequest::class, mappedBy = "proposedEnrolment")
      */
     private ?ExchangeRequest $proposedExchange = null;
 
