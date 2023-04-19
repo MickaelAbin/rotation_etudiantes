@@ -7,7 +7,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=EnrolmentRepository::class)
+ * @ORM\Entity(repositoryClass = EnrolmentRepository::class)
  * @ORM\Table(name = "enrolments")
  */
 class Enrolment
