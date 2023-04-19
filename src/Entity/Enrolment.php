@@ -34,6 +34,18 @@ class Enrolment
      */
     private ?ExchangeRequest $proposedExchange = null;
 
+    /**
+     * @ORM\ManyToOne(targetEntity = ClinicalRotationCategory::class, fetch = "EAGER")
+     * @ORM\JoinColumn(name = "clinical_rotation_category_id", nullable = false, options = {"unsigned": true})
+     */
+    private ?ClinicalRotationCategory $clinicalRotationCategory = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity = Student::class, inversedBy = "enrolments", fetch = "EAGER")
+     * @ORM\JoinColumn(name = "student_id", referencedColumnName = "moodle_user_id", nullable=false, options = {"unsigned": true})
+     */
+    private ?Student $student = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,6 +91,28 @@ class Enrolment
         }
 
         $this->proposedExchange = $proposedExchange;
+        return $this;
+    }
+
+    public function getClinicalRotationCategory(): ?ClinicalRotationCategory
+    {
+        return $this->clinicalRotationCategory;
+    }
+
+    public function setClinicalRotationCategory(?ClinicalRotationCategory $clinicalRotationCategory): self
+    {
+        $this->clinicalRotationCategory = $clinicalRotationCategory;
+        return $this;
+    }
+
+    public function getStudent(): ?Student
+    {
+        return $this->student;
+    }
+
+    public function setStudent(?Student $student): self
+    {
+        $this->student = $student;
         return $this;
     }
 }
