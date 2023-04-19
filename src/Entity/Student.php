@@ -6,34 +6,34 @@ use App\Repository\StudentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=StudentRepository::class)
- * @ORM\Table(name="students")
+ * @ORM\Entity(repositoryClass = StudentRepository::class)
+ * @ORM\Table(name = "students")
  */
 class Student
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="moodle_user_id", type="bigint", options={"unsigned": true})
+     * @ORM\Column(name = "moodle_user_id", type = "bigint", options = {"unsigned": true})
      */
     private ?int $moodleUserID = null;
 
     /**
-     * @ORM\Column(name="first_name", type="string", length=50, nullable=false)
+     * @ORM\Column(name = "first_name", type = "string", length = 50, nullable = false)
      */
     private ?string $firstName = null;
 
     /**
-     * @ORM\Column(name="last_name", type="string", length=50, nullable=false)
+     * @ORM\Column(name = "last_name", type = "string", length = 50, nullable = false)
      */
     private ?string $lastName = null;
 
     /**
-     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     * @ORM\Column(name = "email", type = "string", length = 255, nullable = false)
      */
     private ?string $email = null;
 
     /**
-     * @ORM\Column(name="is_on_rotation_schedule", type="boolean", nullable=false)
+     * @ORM\Column(name = "is_on_rotation_schedule", type = "boolean", nullable = false)
      */
     private ?bool $isOnRotationSchedule = null;
 
@@ -45,7 +45,6 @@ class Student
     public function setMoodleUserID(int $moodleUserID): self
     {
         $this->moodleUserID = $moodleUserID;
-
         return $this;
     }
 
@@ -57,7 +56,6 @@ class Student
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
-
         return $this;
     }
 
@@ -69,7 +67,6 @@ class Student
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
-
         return $this;
     }
 
@@ -81,7 +78,6 @@ class Student
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -93,7 +89,6 @@ class Student
     public function setIsOnRotationSchedule(bool $isOnRotationSchedule): self
     {
         $this->isOnRotationSchedule = $isOnRotationSchedule;
-
         return $this;
     }
 }

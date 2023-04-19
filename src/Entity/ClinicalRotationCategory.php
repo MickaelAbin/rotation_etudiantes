@@ -3,61 +3,70 @@
 namespace App\Entity;
 
 use App\Repository\ClinicalRotationCategoriesRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=ClinicalRotationCategoriesRepository::class)
- * @ORM\Table(name="clinical_rotation_categories")
+ * @ORM\Entity(repositoryClass = ClinicalRotationCategoriesRepository::class)
+ * @ORM\Table(name = "clinical_rotation_categories")
  */
 class ClinicalRotationCategory
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer", options={"unsigned": true})
+     * @ORM\GeneratedValue(strategy = "AUTO")
+     * @ORM\Column(name = "id", type = "integer", options = {"unsigned": true})
      */
     private ?int $id = null;
 
     /**
-     * @ORM\Column(type="string", length=100, name="label")
-     * @Assert\Length(min={2},max={100})
-     * @Assert\NotBlank(message="Le libellé doit être renseigné")
+     * @Assert\NotBlank(message = "Le libellé doit être renseigné")
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 100,
+     *     minMessage = "Le libellé doit faire au moins {{ limit }} caractères",
+     *     maxMessage = "Le libellé peut faire au maximum {{ limit }} caractères"
+     *     )
+     * @ORM\Column(type = "string", length = 100, name = "label", nullable = false)
      */
-    private ?String $label;
+    private ?String $label = null;
 
     /**
-     * @ORM\Column(type="time", name="start_time")
-     * @Assert\LessThan(propertyPath="endTime",message="L'heure de début doit être plus petite que l'heure de fin")
-     * @Assert\NotBlank(message="La date de début doit être renseignée")
+     * @Assert\NotBlank(message = "L'heure de début doit être renseignée")
+     * @ORM\Column(name = "start_time", type = "time", nullable = false)
      */
-    private ?\DateTimeImmutable $startTime;
+    private ?DateTimeImmutable $startTime = null;
 
     /**
-     * @ORM\Column(type="time", name="end_time")
-     * @Assert\GreaterThan(propertyPath="startTime")
-     * @Assert\NotBlank(message="La date de fin doit être renseignée")
+     * @Assert\NotBlank(message="L'heure de fin doit être renseignée")
+     * @Assert\GreaterThan(propertyPath = "startTime", message = "L'heure de fin doit être supérieure à l'heure de début")
+     * @ORM\Column(name = "end_time", type = "time", nullable = false)
      */
-    private ?\DateTimeImmutable $endTime;
+    private ?DateTimeImmutable $endTime = null;
 
     /**
-     * @ORM\Column(type="smallint", name="nb_students")
-     * @Assert\NotBlank(message="Le nombre d'étudiant doit être renseigné")
-     * @Assert\Positive()
-     * @Assert\Length(min={1},max={10})
+     * @Assert\NotBlank(message = "Le nombre d'étudiant doit être renseigné")
+     * @Assert\Length(
+     *     min = 1,
+     *     max = 65535,
+     *     minMessage = "Le nombre d'étudiants doit être au minimum {{ limit }}",
+     *     maxMessage = "Le nombre d'étudiants ne peut pas être plus de {{ limit }}"
+     *     )
+     * @ORM\Column(type = "smallint", name = "nb_students", nullable = false, options = {"unsigned": true})
      */
-    private $nbStudents;
+    private ?int $nbStudents = null;
 
     /**
-     * @ORM\Column(type="boolean", name="is_on_weekend")
-     * @Assert\NotBlank(message="La période doit être renseignée")
+     * @Assert\NotBlank(message = "En semaine ou weekend doit être renseignée")
+     * @ORM\Column(name = "is_on_weekend", type = "boolean", nullable = false)
      */
-    private ?bool $isOnWeekend;
+    private ?bool $isOnWeekend = null;
 
     /**
-     * @ORM\Column(type="string", length=7, nullable=true, name="color")
+     * @ORM\Column(name = "color", type = "string", length = 255, nullable = true)
      */
-    private ?String $color;
+    private ?String $color = null;
 
     public function getId(): ?int
     {
@@ -72,31 +81,28 @@ class ClinicalRotationCategory
     public function setLabel(string $label): self
     {
         $this->label = $label;
-
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeImmutable
+    public function getStartTime(): ?DateTimeImmutable
     {
         return $this->startTime;
     }
 
-    public function setStartTime(\DateTimeImmutable $startTime): self
+    public function setStartTime(DateTimeImmutable $startTime): self
     {
         $this->start_time = $startTime;
-
         return $this;
     }
 
-    public function getEndTime(): ?\DateTimeImmutable
+    public function getEndTime(): ?DateTimeImmutable
     {
         return $this->endTime;
     }
 
-    public function setEndTime(\DateTimeImmutable $endTime): self
+    public function setEndTime(DateTimeImmutable $endTime): self
     {
         $this->endTime = $endTime;
-
         return $this;
     }
 
@@ -108,7 +114,6 @@ class ClinicalRotationCategory
     public function setNbStudents(int $nbStudents): self
     {
         $this->nbStudents = $nbStudents;
-
         return $this;
     }
 
@@ -120,7 +125,6 @@ class ClinicalRotationCategory
     public function setIsOnWeekend(bool $isOnWeekend): self
     {
         $this->isOnWeekend = $isOnWeekend;
-
         return $this;
     }
 
@@ -132,7 +136,6 @@ class ClinicalRotationCategory
     public function setColor(?string $color): self
     {
         $this->color = $color;
-
         return $this;
     }
 }

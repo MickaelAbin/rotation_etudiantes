@@ -3,96 +3,113 @@
 namespace App\Entity;
 
 use App\Repository\UniversityCalendarRepository;
+use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=UniversityCalendarRepository::class)
- * @ORM\Table(name="university_calendars")
+ * @ORM\Entity(repositoryClass = UniversityCalendarRepository::class)
+ * @ORM\Table(name = "university_calendars")
  */
 class UniversityCalendar
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer", options={"unsigned": true})
+     * @ORM\GeneratedValue(strategy = "AUTO")
+     * @ORM\Column(name = "id", type = "integer", options = {"unsigned": true})
      */
     private ?int $id = null;
 
     /**
-     * @ORM\Column(type="date_immutable", name="start_date")
-     * @Assert\LessThan(propertyPath="endDate",message="La date de début doit être plus petite que la date de fin")
-     * @Assert\NotBlank(message="La date de début doit être renseignée")
+     * @Assert\NotBlank(message = "La date de début doit être renseignée")
+     * @ORM\Column(name = "start_date", type = "date", nullable = false)
      */
-    private  ?\DateTimeImmutable $startDate;
+    private  ?DateTimeImmutable $startDate = null;
 
     /**
-     * @ORM\Column(type="date_immutable", name="end_date")
-     * @Assert\GreaterThan(propertyPath="startDate",message="La date de fin doit être plus grande que la date de début")
-     * @Assert\NotBlank(message="La date de fin doit être renseignée")
+     * @Assert\NotBlank(message = "La date de fin doit être renseignée")
+     * @Assert\GreaterThan(propertyPath = "startDate", message = "La date de fin doit être postérieure à la date de début")
+     * @ORM\Column(name = "end_date", type = "date", nullable = false)
      */
-    private ?\DateTimeImmutable $endDate;
+    private ?DateTimeImmutable $endDate = null;
 
     /**
-     * @ORM\Column(type="json", nullable=false, name="public_holiddays_with_rotations")
+     * @ORM\Column(name = "public_holidays_with_rotation", type = "json", nullable = false)
      */
-    private $publicHoliddaysWithRotations = [];
+    private Collection $publicHolidaysWithRotation;
 
     /**
-     * @ORM\Column(type="json", nullable=false, name="days_without_rotation")
+     * @ORM\Column(name = "days_without_rotation", type = "json", nullable = false)
      */
-    private $daysWithoutRotation = [];
+    private Collection $daysWithoutRotation;
+
+    public function __construct()
+    {
+        $this->publicHolidaysWithRotation = new ArrayCollection();
+        $this->daysWithoutRotation = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStartDate(): ?\DateTimeImmutable
+    public function getStartDate(): ?DateTimeImmutable
     {
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeImmutable $startDate): self
+    public function setStartDate(DateTimeImmutable $startDate): self
     {
         $this->startDate = $startDate;
-
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeImmutable
+    public function getEndDate(): ?DateTimeImmutable
     {
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeImmutable $endDate): self
+    public function setEndDate(DateTimeImmutable $endDate): self
     {
         $this->endDate = $endDate;
-
         return $this;
     }
 
-    public function getPublicHoliddaysWithRotations(): ?array
+    public function getPublicHolidaysWithRotation(): Collection
     {
-        return $this->publicHoliddaysWithRotations;
+        return $this->publicHolidaysWithRotation;
     }
 
-    public function setPublicHoliddaysWithRotations(?array $publicHoliddaysWithRotations): self
+    public function addPublicHolidayWithRotation(DateTimeImmutable $date): void
     {
-        $this->publicHoliddaysWithRotations = $publicHoliddaysWithRotations;
-
-        return $this;
+        if(!$this->publicHolidaysWithRotation->contains($date)) {
+            $this->publicHolidaysWithRotation->add($date);
+        }
     }
 
-    public function getDaysWithoutRotation(): ?array
+    public function removePublicHolidayWithRotation(DateTimeImmutable $date): void
+    {
+        $this->publicHolidaysWithRotation->removeElement($date);
+    }
+
+    public function getDaysWithoutRotation(): Collection
     {
         return $this->daysWithoutRotation;
     }
 
-    public function setDaysWithoutRotation(?array $daysWithoutRotation): self
+    public function addDayWithoutRotation(DateTimeImmutable $date): void
     {
-        $this->daysWithoutRotation = $daysWithoutRotation;
-
-        return $this;
+        if(!$this->daysWithoutRotation->contains($date)) {
+            $this->daysWithoutRotation->add($date);
+        }
     }
+
+    public function removeDayWithoutRotation(DateTimeImmutable $date): void
+    {
+        $this->daysWithoutRotation->removeElement($date);
+    }
+
 }

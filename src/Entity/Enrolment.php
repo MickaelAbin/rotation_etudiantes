@@ -24,6 +24,16 @@ class Enrolment
      */
     private ?DateTimeImmutable $date = null;
 
+    /**
+     * @ORM\OneToOne(targetEntity = ExchangeRequest::class, mappedBy = "desiredEnrolment")
+     */
+    private ?ExchangeRequest $requestedExchange = null;
+
+    /**
+     * @ORM\OneToOne(targetEntity=ExchangeRequest::class, mappedBy = "proposedEnrolment")
+     */
+    private ?ExchangeRequest $proposedExchange = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -37,6 +47,38 @@ class Enrolment
     public function setDate(DateTimeImmutable $date): self
     {
         $this->date = $date;
+        return $this;
+    }
+
+    public function getRequestedExchange(): ?ExchangeRequest
+    {
+        return $this->requestedExchange;
+    }
+
+    public function setRequestedExchange(ExchangeRequest $requestedExchange): self
+    {
+        // set the owning side of the relation if necessary
+        if ($requestedExchange->getDesiredEnrolment() !== $this) {
+            $requestedExchange->setDesiredEnrolment($this);
+        }
+
+        $this->requestedExchange = $requestedExchange;
+        return $this;
+    }
+
+    public function getProposedExchange(): ?ExchangeRequest
+    {
+        return $this->proposedExchange;
+    }
+
+    public function setProposedExchange(ExchangeRequest $proposedExchange): self
+    {
+        // set the owning side of the relation if necessary
+        if ($proposedExchange->getProposedEnrolment() !== $this) {
+            $proposedExchange->setProposedEnrolment($this);
+        }
+
+        $this->proposedExchange = $proposedExchange;
         return $this;
     }
 }
