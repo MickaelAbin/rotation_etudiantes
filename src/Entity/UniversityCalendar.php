@@ -45,6 +45,12 @@ class UniversityCalendar
      */
     private Collection $daysWithoutRotation;
 
+    /**
+     * @ORM\OneToOne(targetEntity = AcademicLevel::class, inversedBy = "universityCalendar", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name = "academic_level_id", nullable = false, options = {"unsigned": true})
+     */
+    private $academicLevel;
+
     public function __construct()
     {
         $this->publicHolidaysWithRotation = new ArrayCollection();
@@ -110,6 +116,18 @@ class UniversityCalendar
     public function removeDayWithoutRotation(DateTimeImmutable $date): void
     {
         $this->daysWithoutRotation->removeElement($date);
+    }
+
+    public function getAcademicLevel(): ?AcademicLevel
+    {
+        return $this->academicLevel;
+    }
+
+    public function setAcademicLevel(AcademicLevel $academicLevel): self
+    {
+        $this->academicLevel = $academicLevel;
+
+        return $this;
     }
 
 }

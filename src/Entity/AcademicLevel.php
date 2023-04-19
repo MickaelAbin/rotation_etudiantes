@@ -23,6 +23,11 @@ class AcademicLevel
      */
     private ?string $label = null;
 
+    /**
+     * @ORM\OneToOne(targetEntity = UniversityCalendar::class, mappedBy = "academicLevel")
+     */
+    private $universityCalendar;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,6 +41,23 @@ class AcademicLevel
     public function setLabel(string $label): self
     {
         $this->label = $label;
+        return $this;
+    }
+
+    public function getUniversityCalendar(): ?UniversityCalendar
+    {
+        return $this->universityCalendar;
+    }
+
+    public function setUniversityCalendar(UniversityCalendar $universityCalendar): self
+    {
+        // set the owning side of the relation if necessary
+        if ($universityCalendar->getAcademicLevel() !== $this) {
+            $universityCalendar->setAcademicLevel($this);
+        }
+
+        $this->universityCalendar = $universityCalendar;
+
         return $this;
     }
 }
