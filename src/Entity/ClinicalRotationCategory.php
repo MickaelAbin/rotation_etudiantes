@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ClinicalRotationCategoriesRepository;
-use Cassandra\Time;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -29,17 +28,17 @@ class ClinicalRotationCategory
 
     /**
      * @ORM\Column(type="time", name="start_time")
-     * @Assert\LessThan(propertyPath="end_time")
+     * @Assert\LessThan(propertyPath="endTime",message="L'heure de début doit être plus petite que l'heure de fin")
      * @Assert\NotBlank(message="La date de début doit être renseignée")
      */
-    private ?\DateTimeInterface $startTime;
+    private ?\DateTimeImmutable $startTime;
 
     /**
      * @ORM\Column(type="time", name="end_time")
-     * @Assert\GreaterThan(propertyPath="start_time")
+     * @Assert\GreaterThan(propertyPath="startTime")
      * @Assert\NotBlank(message="La date de fin doit être renseignée")
      */
-    private ?\DateTimeInterface $endTime;
+    private ?\DateTimeImmutable $endTime;
 
     /**
      * @ORM\Column(type="smallint", name="nb_students")
@@ -77,24 +76,24 @@ class ClinicalRotationCategory
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
+    public function getStartTime(): ?\DateTimeImmutable
     {
         return $this->startTime;
     }
 
-    public function setStartTime(\DateTimeInterface $startTime): self
+    public function setStartTime(\DateTimeImmutable $startTime): self
     {
         $this->start_time = $startTime;
 
         return $this;
     }
 
-    public function getEndTime(): ?\DateTimeInterface
+    public function getEndTime(): ?\DateTimeImmutable
     {
         return $this->endTime;
     }
 
-    public function setEndTime(\DateTimeInterface $endTime): self
+    public function setEndTime(\DateTimeImmutable $endTime): self
     {
         $this->endTime = $endTime;
 
