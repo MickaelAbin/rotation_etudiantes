@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,7 +40,19 @@ class StudentRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
+
+    public function trouverLesDixPremiers()
+    {
+
+        return $this
+            ->getManager('slave')
+            ->createQueryBuilder('s')
+            ->select('s.id')
+            ->setMaxResults(10)
+            ->getQuery();
+
+    }
+//    **
 //     * @return Student[] Returns an array of Student objects
 //     */
 //    public function findByExampleField($value): array
