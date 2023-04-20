@@ -44,6 +44,12 @@ class Student
      */
     private Collection $enrolments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity = AcademicLevel::class, inversedBy = "students")
+     * @ORM\JoinColumn(name = "academic_level_id", nullable = false, options = {"unsigned": true})
+     */
+    private ?AcademicLevel $academicLevel = null;
+
     public function __construct()
     {
         $this->enrolments = new ArrayCollection();
@@ -131,6 +137,17 @@ class Student
             }
         }
 
+        return $this;
+    }
+
+    public function getAcademicLevel(): ?AcademicLevel
+    {
+        return $this->academicLevel;
+    }
+
+    public function setAcademicLevel(?AcademicLevel $academicLevel): self
+    {
+        $this->academicLevel = $academicLevel;
         return $this;
     }
 }

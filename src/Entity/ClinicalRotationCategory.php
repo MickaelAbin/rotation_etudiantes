@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ClinicalRotationCategoriesRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Form\Exception\AccessException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,7 +29,7 @@ class ClinicalRotationCategory
      *     minMessage = "Le libellé doit faire au moins {{ limit }} caractères",
      *     maxMessage = "Le libellé peut faire au maximum {{ limit }} caractères"
      *     )
-     * @ORM\Column(type = "string", length = 100, name = "label", nullable = false)
+     * @ORM\Column(name = "label", type = "string", length = 100, nullable = false)
      */
     private ?String $label = null;
 
@@ -39,7 +40,7 @@ class ClinicalRotationCategory
     private ?DateTimeImmutable $startTime = null;
 
     /**
-     * @Assert\NotBlank(message="L'heure de fin doit être renseignée")
+     * @Assert\NotBlank(message = "L'heure de fin doit être renseignée")
      * @Assert\GreaterThan(propertyPath = "startTime", message = "L'heure de fin doit être supérieure à l'heure de début")
      * @ORM\Column(name = "end_time", type = "time", nullable = false)
      */
@@ -53,12 +54,12 @@ class ClinicalRotationCategory
      *     minMessage = "Le nombre d'étudiants doit être au minimum {{ limit }}",
      *     maxMessage = "Le nombre d'étudiants ne peut pas être plus de {{ limit }}"
      *     )
-     * @ORM\Column(type = "smallint", name = "nb_students", nullable = false, options = {"unsigned": true})
+     * @ORM\Column(name = "nb_students", type = "smallint", nullable = false, options = {"unsigned": true})
      */
     private ?int $nbStudents = null;
 
     /**
-     * @Assert\NotBlank(message = "En semaine ou weekend doit être renseignée")
+     * @Assert\NotBlank(message = "En semaine ou weekend doit être renseigné")
      * @ORM\Column(name = "is_on_weekend", type = "boolean", nullable = false)
      */
     private ?bool $isOnWeekend = null;
@@ -67,6 +68,12 @@ class ClinicalRotationCategory
      * @ORM\Column(name = "color", type = "string", length = 255, nullable = true)
      */
     private ?String $color = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity = AcademicLevel::class, inversedBy = "clinicalRotationCategories")
+     * @ORM\JoinColumn(name = "academic_level_id", nullable = false, options = {"unsigned": true})
+     */
+    private ?AcademicLevel $academicLevel = null;
 
     public function getId(): ?int
     {
@@ -136,6 +143,17 @@ class ClinicalRotationCategory
     public function setColor(?string $color): self
     {
         $this->color = $color;
+        return $this;
+    }
+
+    public function getAcademicLevel(): ?AcademicLevel
+    {
+        return $this->academicLevel;
+    }
+
+    public function setAcademicLevel(?AcademicLevel $academicLevel): self
+    {
+        $this->academicLevel = $academicLevel;
         return $this;
     }
 }
