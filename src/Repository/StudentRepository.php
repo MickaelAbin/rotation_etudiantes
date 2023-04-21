@@ -6,6 +6,7 @@ use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Psr\Container\ContainerInterface;
 
 /**
  * @extends ServiceEntityRepository<Student>
@@ -17,8 +18,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class StudentRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+
+    public function __construct(ManagerRegistry $registry, ContainerInterface $container)
     {
+        $this->container = $container;
         parent::__construct($registry, Student::class);
     }
 
@@ -45,11 +49,13 @@ class StudentRepository extends ServiceEntityRepository
     {
 
         return $this
-            ->getManager('slave')
+            ->container->get('doctrine')
+            ->getManager('moodle')
             ->createQueryBuilder('s')
             ->select('s.id')
-            ->setMaxResults(10)
-            ->getQuery();
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
 
     }
 //    **

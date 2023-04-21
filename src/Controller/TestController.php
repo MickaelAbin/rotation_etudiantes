@@ -15,8 +15,15 @@ class TestController extends AbstractController
      */
     public function index(StudentRepository $studentRepository, ManagerRegistry $doctrine): Response
     {
-        $slaveEntityManager = $doctrine->getManager('slave');
-        return $this->render('home/index.html.twig', [
+//        $slaveEntityManager = $doctrine->getManager('slave');
+//        // Both methods return the default entity manager
+//        $entityManager = $doctrine->getManager();
+//        $entityManager = $doctrine->getManager('default');
+//
+//        // This method returns instead the "customer" entity manager
+//        $slaveEntityManager = $doctrine->getManager('slave');
+
+        return $this->render('test/index.html.twig', [
             'students'=>$studentRepository->trouverLesDixPremiers(),
         ]);
     }
