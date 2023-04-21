@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ClinicalRotationCategoriesRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Scalar\String_;
 use Symfony\Component\Form\Exception\AccessException;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,14 +36,14 @@ class ClinicalRotationCategory
 
     /**
      * @Assert\NotBlank(message = "L'heure de début doit être renseignée")
-     * @ORM\Column(name = "start_time", type = "time", nullable = false)
+     * @ORM\Column(name = "start_time", type = "time_immutable", nullable = false)
      */
     private ?DateTimeImmutable $startTime = null;
 
     /**
      * @Assert\NotBlank(message = "L'heure de fin doit être renseignée")
      * @Assert\GreaterThan(propertyPath = "startTime", message = "L'heure de fin doit être supérieure à l'heure de début")
-     * @ORM\Column(name = "end_time", type = "time", nullable = false)
+     * @ORM\Column(name = "end_time", type = "time_immutable", nullable = false)
      */
     private ?DateTimeImmutable $endTime = null;
 
@@ -59,7 +60,8 @@ class ClinicalRotationCategory
     private ?int $nbStudents = null;
 
     /**
-     * @Assert\NotBlank(message = "En semaine ou weekend doit être renseigné")
+     * @Assert\Type("bool")
+     * @Assert\NotNull(message = "En semaine ou weekend doit être renseigné")
      * @ORM\Column(name = "is_on_weekend", type = "boolean", nullable = false)
      */
     private ?bool $isOnWeekend = null;
@@ -74,6 +76,7 @@ class ClinicalRotationCategory
      * @ORM\JoinColumn(name = "academic_level_id", nullable = false, options = {"unsigned": true})
      */
     private ?AcademicLevel $academicLevel = null;
+
 
     public function getId(): ?int
     {
@@ -98,7 +101,7 @@ class ClinicalRotationCategory
 
     public function setStartTime(DateTimeImmutable $startTime): self
     {
-        $this->start_time = $startTime;
+        $this->startTime = $startTime;
         return $this;
     }
 

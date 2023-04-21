@@ -46,6 +46,11 @@ class AcademicLevel
         $this->students = new ArrayCollection();
     }
 
+    public function __toString(): String
+    {
+        return $this->label;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
