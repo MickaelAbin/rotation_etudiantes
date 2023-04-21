@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ClinicalRotationCategory index{% endblock %}
+
+{% block body %}
+    <h1>ClinicalRotationCategory index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Label</th>
+                <th>StartTime</th>
+                <th>EndTime</th>
+                <th>NbStudents</th>
+                <th>IsOnWeekend</th>
+                <th>Color</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for clinical_rotation_category in clinical_rotation_categories %}
+            <tr>
+                <td>{{ clinical_rotation_category.id }}</td>
+                <td>{{ clinical_rotation_category.label }}</td>
+                <td>{{ clinical_rotation_category.startTime ? clinical_rotation_category.startTime|date('H:i:s') : '' }}</td>
+                <td>{{ clinical_rotation_category.endTime ? clinical_rotation_category.endTime|date('H:i:s') : '' }}</td>
+                <td>{{ clinical_rotation_category.nbStudents }}</td>
+                <td>{{ clinical_rotation_category.isOnWeekend ? 'Yes' : 'No' }}</td>
+                <td>{{ clinical_rotation_category.color }}</td>
+                <td>
+                    <a href="{{ path('app_clinical_rotation_category_show', {'id': clinical_rotation_category.id}) }}">show</a>
+                    <a href="{{ path('app_clinical_rotation_category_edit', {'id': clinical_rotation_category.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_clinical_rotation_category_new') }}">Create new</a>
+{% endblock %}
