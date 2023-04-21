@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title>{% block title %}INTRANET{% endblock %}</title>
+        <title>{% block title %}Mes Gardes{% endblock %}</title>
         <!-- Favicon Intranet -->
         <link rel="icon" href="https://connect.oniris-nantes.fr/theme/image.php/lambda/theme/1680610928/favicon">
         <!-- Font Awesome 6.4.0 (Free) -->
@@ -19,28 +19,44 @@
 
     </head>
     <body>
-        <header>
+        <header class="d-flex justify-content-center">
+            <div class="col-10">
+                <img src="{{ asset('assets/oniris_banner.jpg') }}">
+            </div>
+            <div>
+
+            </div>
+
 
         </header>
         <main>
-            <div class="container">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <h1 class="mx-auto text-center p-2">
-                        {% block h1 %} Titre h1 {% endblock %}
-                    </h1>
-                    {% block body %}
-                        <div>
-                            <a href=#>
-                                <i title="Gamepad" class="fa-solid fa-gamepad fa-2xl"></i>
-                            </a>
-                        </div>
-                    {% endblock %}
+            <section class="m-auto">
+                <div class="container">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <h1 class="mx-auto text-center p-2">Gardes étudiantes</h1>
+                    </div>
                 </div>
-            </div>
+                <div class="container py-2 px-4 d-flex align-items-center justify-content-center position-static">
+                    {% for group,messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ group }} mt-2 col-7 text-center" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+             </section>
+            <section class="d-flex justify-content-center">
+                <nav class="nav nav-tabs flex-column flex-sm-row col-10" id="navbarResponsive">
+                    <a class="flex-sm-fill text-sm-center nav-link active" data-bs-toggle="tabs" href="{{ path('home') }}">Accueil</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" data-bs-toggle="tabs" href="#">Liste par date</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" data-bs-toggle="tabs" href="#">Calendrier</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" data-bs-toggle="tabs" href="#">Liste par étudiants</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" data-bs-toggle="tabs" href="#">Historique des échanges</a>
+                </nav>
+            </section>
         </main>
 
-        <footer>
-
+        <footer class="bg-dark small text-center text-white-50 p-4">
+            <div class="container p-2">&copy; Oniris, Nantes | Pôle Applicatif 2023</div>
         </footer>
 
         <!-- Bootstrap 5.2.3 JS -->

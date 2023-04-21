@@ -10,10 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    private ManagerRegistry $managerRegistry;
-    public function __construct(ManagerRegistry $managerRegistry) {
-        $this->managerRegistry = $managerRegistry;
-    }
+//    private ManagerRegistry $managerRegistry;
+//    public function __construct(ManagerRegistry $managerRegistry) {
+//        $this->managerRegistry = $managerRegistry;
+//    }
 
     /**
      * @Route(path = "/", name = "home")
@@ -25,12 +25,12 @@ class HomeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(path = "/moodle", name = "moodle")
-     */
-    public function test(): Response
-    {
-        $connection = $this->managerRegistry->getConnection('mdl_user');
-    }
+//    /**
+//     * @Route(path = "/moodle", name = "moodle")
+//     */
+//    public function test(): Response
+//    {
+//        $connection = $this->managerRegistry->getConnection('mdl_user');
+//    }
 
 }

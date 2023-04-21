@@ -1,32 +1,20 @@
 doctrine:
     dbal:
-        connections:
-            clinical_rotation:
-                url: '%env(resolve:DATABASE_URL)%'
-            mdl_user:
-                url: '%env(resolve:DATABASE_MOODLE)%'
-        default_connection: clinical_rotation
-
+        url: '%env(resolve:DATABASE_URL)%'
 
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
         # server_version: '15'
     orm:
         auto_generate_proxy_classes: true
-        default_entity_manager: default
-        entity_managers:
-            default:
-                connection: clinical_rotation
-                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-                auto_mapping: true
-                mappings:
-                    Main:
-                        is_bundle: false
-                        dir: '%kernel.project_dir%/src/Entity'
-                        prefix: 'App\Entity'
-                        alias: Main
-            moodle:
-                connection: mdl_user
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            Main:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'
+                alias: Main
 
 when@test:
     doctrine:
