@@ -1,20 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ClinicalRotationCategory index{% endblock %}
 
-{% block body %}
-    <h1>ClinicalRotationCategory index</h1>
+{% block main %}
+    <h1>Liste des catégories de garde</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Label</th>
-                <th>StartTime</th>
-                <th>EndTime</th>
-                <th>NbStudents</th>
-                <th>IsOnWeekend</th>
-                <th>Color</th>
+                <th>Libellé</th>
+                <th>Promotion</th>
+                <th>Heure de début</th>
+                <th>Heure de fin</th>
+                <th>Nombre d'étudiant</th>
+                <th>Week end</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -23,14 +22,14 @@
             <tr>
                 <td>{{ clinical_rotation_category.id }}</td>
                 <td>{{ clinical_rotation_category.label }}</td>
-                <td>{{ clinical_rotation_category.startTime ? clinical_rotation_category.startTime|date('H:i:s') : '' }}</td>
-                <td>{{ clinical_rotation_category.endTime ? clinical_rotation_category.endTime|date('H:i:s') : '' }}</td>
+                <td>{{ clinical_rotation_category.academicLevel.label }}</td>
+                <td>{{ clinical_rotation_category.startTime ? clinical_rotation_category.startTime|date('H:i') : '' }}</td>
+                <td>{{ clinical_rotation_category.endTime ? clinical_rotation_category.endTime|date('H:i') : '' }}</td>
                 <td>{{ clinical_rotation_category.nbStudents }}</td>
-                <td>{{ clinical_rotation_category.isOnWeekend ? 'Yes' : 'No' }}</td>
-                <td>{{ clinical_rotation_category.color }}</td>
+                <td>{{ clinical_rotation_category.isOnWeekend ? 'Oui' : 'Non' }}</td>
                 <td>
-                    <a href="{{ path('app_clinical_rotation_category_show', {'id': clinical_rotation_category.id}) }}">show</a>
-                    <a href="{{ path('app_clinical_rotation_category_edit', {'id': clinical_rotation_category.id}) }}">edit</a>
+                    <a href="{{ path('app_clinical_rotation_category_show', {'id': clinical_rotation_category.id}) }}">voir</a>
+                    <a href="{{ path('app_clinical_rotation_category_edit', {'id': clinical_rotation_category.id}) }}">modifier</a>
                 </td>
             </tr>
         {% else %}

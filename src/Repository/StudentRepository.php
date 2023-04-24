@@ -45,19 +45,19 @@ class StudentRepository extends ServiceEntityRepository
     }
 
 
-    public function trouverLesDixPremiers()
-    {
-
-        return $this
-            ->container->get('doctrine')
-            ->getManager('moodle')
-            ->createQueryBuilder('s')
-            ->select('s.id')
-            ->setMaxResults(5)
-            ->getQuery()
-            ->getResult();
-
-    }
+//    public function trouverLesDixPremiers()
+//    {
+//
+//        return $this
+//            ->container->get('doctrine')
+//            ->getManager('moodle')
+//            ->createQueryBuilder('s')
+//            ->select('s.id')
+//            ->setMaxResults(5)
+//            ->getQuery()
+//            ->getResult();
+//
+//    }
 //    **
 //     * @return Student[] Returns an array of Student objects
 //     */
