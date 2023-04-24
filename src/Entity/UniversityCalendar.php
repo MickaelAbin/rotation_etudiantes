@@ -49,7 +49,7 @@ class UniversityCalendar
      * @ORM\OneToOne(targetEntity = AcademicLevel::class, inversedBy = "universityCalendar", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name = "academic_level_id", nullable = false, options = {"unsigned": true})
      */
-    private $academicLevel;
+    private ?AcademicLevel $academicLevel = null;
 
     public function __construct()
     {
