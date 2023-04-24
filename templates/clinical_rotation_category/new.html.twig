@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ClinicalRotationCategory{% endblock %}
+
+{% block body %}
+    <h1>Création d'une catégorie de garde</h1>
+
+    {{ include('clinical_rotation_category/_form.html.twig') }}
+
+    <a href="{{ path('app_clinical_rotation_category_index') }}">back to list</a>
+{% endblock %}
