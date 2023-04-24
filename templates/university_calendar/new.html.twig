@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New UniversityCalendar{% endblock %}
+
+{% block main %}
+    <h1>Create new UniversityCalendar</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.startDate) }}
+    {{ form_row(form.endDate) }}
+    {{ form_row(form.Enregistrer) }}
+
+
+
+    <a href="{{ path('app_university_calendar_index') }}">back to list</a>
+{% endblock %}

@@ -36,12 +36,12 @@ class UniversityCalendar
     private ?DateTimeImmutable $endDate = null;
 
     /**
-     * @ORM\Column(name = "public_holidays_with_rotation", type = "json", nullable = false)
+     * @ORM\Column(name = "public_holidays_with_rotation", type = "json", nullable = true)
      */
     private Collection $publicHolidaysWithRotation;
 
     /**
-     * @ORM\Column(name = "days_without_rotation", type = "json", nullable = false)
+     * @ORM\Column(name = "days_without_rotation", type = "json", nullable = true)
      */
     private Collection $daysWithoutRotation;
 

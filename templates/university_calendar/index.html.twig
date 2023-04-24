@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UniversityCalendar index{% endblock %}
+
+{% block main %}
+    <h1>UniversityCalendar index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>PublicHolidaysWithRotation</th>
+                <th>DaysWithoutRotation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for university_calendar in university_calendars %}
+            <tr>
+                <td>{{ university_calendar.id }}</td>
+                <td>{{ university_calendar.startDate ? university_calendar.startDate|date('Y-m-d') : '' }}</td>
+                <td>{{ university_calendar.endDate ? university_calendar.endDate|date('Y-m-d') : '' }}</td>
+                <td>{{ university_calendar.publicHolidaysWithRotation ? university_calendar.publicHolidaysWithRotation|json_encode : '' }}</td>
+                <td>{{ university_calendar.daysWithoutRotation ? university_calendar.daysWithoutRotation|json_encode : '' }}</td>
+                <td>
+                    <a href="{{ path('app_university_calendar_show', {'id': university_calendar.id}) }}">show</a>
+                    <a href="{{ path('app_university_calendar_edit', {'id': university_calendar.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_university_calendar_new') }}">Create new</a>
+{% endblock %}
