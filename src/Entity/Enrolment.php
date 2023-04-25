@@ -20,7 +20,7 @@ class Enrolment
     private ?int $id = null;
 
     /**
-     * @ORM\Column(name = "date", type = "date", nullable = false)
+     * @ORM\Column(name = "date", type = "datetime_immutable", nullable = false)
      */
     private ?DateTimeImmutable $date = null;
 
