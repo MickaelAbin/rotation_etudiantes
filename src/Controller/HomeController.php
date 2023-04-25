@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Repository\EnrolmentRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,15 +15,33 @@ class HomeController extends AbstractController
 //    public function __construct(ManagerRegistry $managerRegistry) {
 //        $this->managerRegistry = $managerRegistry;
 //    }
-
     /**
      * @Route(path = "/", name = "home")
      */
-    public function home(): Response
+    public function home()
     {
-        return $this->render('home/home.html.twig', [
-            'controller_name' => 'HomeController',
-        ]);
+        return $this->render('home/index.html.twig');
+    }
+    /**
+     * @Route(path = "/calendrier", name = "calendrier")
+     */
+    public function calendrier(EnrolmentRepository $enrolmentRepository)
+    {
+        $events = $enrolmentRepository->findAll();
+        $creneaux=[];
+        foreach ($events as $event){
+            $creneaux[]=[
+                'id'=>$event->getId(),
+                'date'=>$event->getDate()->format('Y-m-d'),
+                'title'=>($event->getStudent()->getLastName())." ".($event->getStudent()->getFirstName()." ".($event->getClinicalRotationCategory()->getLabel())),
+                'backgroundColor'=>$event->getClinicalRotationCategory()->getColor(),
+                'description'=>$event->getClinicalRotationCategory()->getLabel(),
+
+
+            ];
+        }
+        $data = json_encode($creneaux);
+        return $this->render('home/calendrier.html.twig', compact('data'));
     }
 
 //    /**

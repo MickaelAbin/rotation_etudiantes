@@ -6,6 +6,7 @@ use App\Entity\AcademicLevel;
 use App\Entity\ClinicalRotationCategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
@@ -45,6 +46,10 @@ class ClinicalRotationCategoryType extends AbstractType
                 'class'=>AcademicLevel::class,
                 'choice_label'=>'label',
                 'label'=>'Promotion : '
+            ])
+
+            ->add('color',ColorType::class,[
+                'label'=>'Couleur : '
             ])
         ;
     }

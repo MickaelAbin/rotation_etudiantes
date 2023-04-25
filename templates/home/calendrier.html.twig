@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+
+
+
+{% block title %}Calendrier{% endblock %}
+{% block stylesheets%}
+    <link rel="stylesheet" href="{{ asset('css/calendrier.css') }}">
+
+{% endblock %}
+
+{% block main %}
+{{ dump(data)  }}
+    <div id="calendrier"></div>
+
+
+{% endblock %}
+{% block javascripts %}
+    <script>window.onload = () => {
+            let calendarElt = document.querySelector("#calendrier")
+
+            let calendar = new FullCalendar.Calendar(calendarElt,{
+
+                initialView : 'dayGridMonth',
+                locale: 'fr',
+                firstDay : 1,
+                timeZone: 'Europe/Paris',
+                headerToolbar : {
+                    start: 'prev,next today',
+                    center:'title',
+                    end: 'dayGridMonth,timeGridWeek'
+                },
+                buttonText : {
+                   today : "Aujourd'hui",
+                   month : 'Mois' ,
+                    week : 'Semaine',
+                },
+                weekNumbers : true,
+                weekText : "S",
+                nowIndicator: true,
+                eventClick: function(info) {
+                    alert('Garde :'+" "+ info.event.title +" "+ info.event.description);
+                },
+                events : {{ data|raw }}
+            })
+            calendar.render()
+        }</script>
+{% endblock %}
+
+
