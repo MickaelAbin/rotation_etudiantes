@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\PublicHoliday;
 use App\Entity\UniversityCalendar;
 use App\Form\UniversityCalendarType;
 use App\Repository\UniversityCalendarRepository;
@@ -11,34 +12,37 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/university/calendar")
+ * @Route(path = "/university-calendar/", name = "university_calendar_")
  */
 class UniversityCalendarController extends AbstractController
 {
     /**
-     * @Route("/", name="app_university_calendar_index", methods={"GET"})
+     * @Route(path = "", name = "index", methods = {"GET"})
      */
     public function index(UniversityCalendarRepository $universityCalendarRepository): Response
     {
+        dump($universityCalendarRepository->findAll());
         return $this->render('university_calendar/index.html.twig', [
             'university_calendars' => $universityCalendarRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/newcalendar", name="app_university_calendar_new", methods={"GET", "POST"})
+     * @Route(path = "new", name = "new", methods = {"GET", "POST"})
      */
     public function new(Request $request, UniversityCalendarRepository $universityCalendarRepository): Response
     {
         $universityCalendar = new UniversityCalendar();
+        $universityCalendar->addPublicHoliday(new PublicHoliday());
+
         $form = $this->createForm(UniversityCalendarType::class, $universityCalendar);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->getClickedButton() === $form->get('Enregistrer')) {
+            if ($form->getClickedButton() === $form->get('save')) {
                 $universityCalendarRepository->add($universityCalendar, true);
             }
-            return $this->redirectToRoute('app_university_calendar_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('university_calendar_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('university_calendar/new.html.twig', [
@@ -48,7 +52,7 @@ class UniversityCalendarController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_university_calendar_show", methods={"GET"})
+     * @Route(path = "/{id}", name = "show", methods = {"GET"})
      */
     public function show(UniversityCalendar $universityCalendar): Response
     {
@@ -58,17 +62,18 @@ class UniversityCalendarController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="app_university_calendar_edit", methods={"GET", "POST"})
+     * @Route(path = "/{id}/edit", name = "edit", methods = {"GET", "POST"})
      */
     public function edit(Request $request, UniversityCalendar $universityCalendar, UniversityCalendarRepository $universityCalendarRepository): Response
     {
+
         $form = $this->createForm(UniversityCalendarType::class, $universityCalendar);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $universityCalendarRepository->add($universityCalendar, true);
 
-            return $this->redirectToRoute('app_university_calendar_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('university_calendar_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('university_calendar/edit.html.twig', [
@@ -78,7 +83,7 @@ class UniversityCalendarController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_university_calendar_delete", methods={"POST"})
+     * @Route(path = " /{id}", name="app_university_calendar_delete", methods={"POST"})
      */
     public function delete(Request $request, UniversityCalendar $universityCalendar, UniversityCalendarRepository $universityCalendarRepository): Response
     {
@@ -86,6 +91,6 @@ class UniversityCalendarController extends AbstractController
             $universityCalendarRepository->remove($universityCalendar, true);
         }
 
-        return $this->redirectToRoute('app_university_calendar_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('university_calendar_index', [], Response::HTTP_SEE_OTHER);
     }
 }

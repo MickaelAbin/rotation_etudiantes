@@ -24,37 +24,42 @@ class UniversityCalendar
 
     /**
      * @Assert\NotBlank(message = "La date de début doit être renseignée")
-     * @ORM\Column(name = "start_date", type = "date", nullable = false)
+     * @ORM\Column(name = "start_date", type = "date_immutable", nullable = false)
      */
-    private  ?DateTimeImmutable $startDate = null;
+    private ?DateTimeImmutable $startDate = null;
 
     /**
      * @Assert\NotBlank(message = "La date de fin doit être renseignée")
      * @Assert\GreaterThan(propertyPath = "startDate", message = "La date de fin doit être postérieure à la date de début")
-     * @ORM\Column(name = "end_date", type = "date", nullable = false)
+     * @ORM\Column(name = "end_date", type = "date_immutable", nullable = false)
      */
     private ?DateTimeImmutable $endDate = null;
 
-    /**
-     * @ORM\Column(name = "public_holidays_with_rotation", type = "json", nullable = true)
-     */
-    private Collection $publicHolidaysWithRotation;
 
     /**
+     * @ORM\OneToMany(targetEntity = PublicHoliday::class, mappedBy = "universityCalendar", cascade={"persist"})
+     */
+    private Collection $publicHolidays;
+
+    /**
+     * @Assert\All({
+     *     @Assert\Date(message = "La date {{ value }} n'est pas dans un format valide")
+     * })
      * @ORM\Column(name = "days_without_rotation", type = "json", nullable = true)
      */
-    private Collection $daysWithoutRotation;
+    private array $daysWithoutRotation = [];
 
     /**
-     * @ORM\OneToOne(targetEntity = AcademicLevel::class, inversedBy = "universityCalendar", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity = AcademicLevel::class, inversedBy = "universityCalendar")
      * @ORM\JoinColumn(name = "academic_level_id", nullable = false, options = {"unsigned": true})
      */
     private ?AcademicLevel $academicLevel = null;
 
+
+
     public function __construct()
     {
-        $this->publicHolidaysWithRotation = new ArrayCollection();
-        $this->daysWithoutRotation = new ArrayCollection();
+        $this->publicHolidays = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,38 +89,43 @@ class UniversityCalendar
         return $this;
     }
 
-    public function getPublicHolidaysWithRotation(): Collection
+    /**
+     * @return Collection<int, PublicHoliday>
+     */
+    public function getPublicHolidays(): Collection
     {
-        return $this->publicHolidaysWithRotation;
+        return $this->publicHolidays;
     }
 
-    public function addPublicHolidayWithRotation(DateTimeImmutable $date): void
+    public function addPublicHoliday(PublicHoliday $publicHoliday): self
     {
-        if(!$this->publicHolidaysWithRotation->contains($date)) {
-            $this->publicHolidaysWithRotation->add($date);
+        if (!$this->publicHolidays->contains($publicHoliday)) {
+            $this->publicHolidays->add($publicHoliday);
+            $publicHoliday->setUniversityCalendar($this);
         }
+        return $this;
     }
 
-    public function removePublicHolidayWithRotation(DateTimeImmutable $date): void
+    public function removePublicHoliday(PublicHoliday $publicHoliday): self
     {
-        $this->publicHolidaysWithRotation->removeElement($date);
+        if ($this->publicHolidays->removeElement($publicHoliday)) {
+            // set the owning side to null (unless already changed)
+            if ($publicHoliday->getUniversityCalendar() === $this) {
+                $publicHoliday->setUniversityCalendar(null);
+            }
+        }
+        return $this;
     }
 
-    public function getDaysWithoutRotation(): Collection
+    public function getDaysWithoutRotation(): array
     {
         return $this->daysWithoutRotation;
     }
 
-    public function addDayWithoutRotation(DateTimeImmutable $date): void
+    public function setDaysWithoutRotation(array $daysWithoutRotation): self
     {
-        if(!$this->daysWithoutRotation->contains($date)) {
-            $this->daysWithoutRotation->add($date);
-        }
-    }
-
-    public function removeDayWithoutRotation(DateTimeImmutable $date): void
-    {
-        $this->daysWithoutRotation->removeElement($date);
+        $this->daysWithoutRotation = $daysWithoutRotation;
+        return $this;
     }
 
     public function getAcademicLevel(): ?AcademicLevel
@@ -126,8 +136,9 @@ class UniversityCalendar
     public function setAcademicLevel(AcademicLevel $academicLevel): self
     {
         $this->academicLevel = $academicLevel;
-
         return $this;
     }
+
+
 
 }
