@@ -42,12 +42,9 @@ class UniversityCalendar
     private Collection $publicHolidays;
 
     /**
-     * @Assert\All({
-     *     @Assert\Date(message = "La date {{ value }} n'est pas dans un format valide")
-     * })
-     * @ORM\Column(name = "days_without_rotation", type = "json", nullable = true)
+     * @ORM\OneToMany(targetEntity = NoRotationPeriod::class, mappedBy = "universityCalendar", cascade={"persist"})
      */
-    private array $daysWithoutRotation = [];
+    private Collection $noRotationPeriods;
 
     /**
      * @ORM\OneToOne(targetEntity = AcademicLevel::class, inversedBy = "universityCalendar")
@@ -55,11 +52,10 @@ class UniversityCalendar
      */
     private ?AcademicLevel $academicLevel = null;
 
-
-
     public function __construct()
     {
         $this->publicHolidays = new ArrayCollection();
+        $this->noRotationPeriods = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,18 +113,35 @@ class UniversityCalendar
         return $this;
     }
 
-    public function getDaysWithoutRotation(): array
+    /**
+     * @return Collection<int, NoRotationPeriod>
+     */
+    public function getNoRotationPeriods(): Collection
     {
-        return $this->daysWithoutRotation;
+        return $this->noRotationPeriods;
     }
 
-    public function setDaysWithoutRotation(array $daysWithoutRotation): self
+    public function addNoRotationPeriod(NoRotationPeriod $noRotationPeriod): self
     {
-        $this->daysWithoutRotation = $daysWithoutRotation;
+        if (!$this->noRotationPeriods->contains($noRotationPeriod)) {
+            $this->noRotationPeriods->add($noRotationPeriod);
+            $noRotationPeriod->setUniversityCalendar($this);
+        }
         return $this;
     }
 
-    public function getAcademicLevel(): ?AcademicLevel
+    public function removeNoRotationPeriod(NoRotationPeriod $noRotationPeriod): self
+    {
+        if ($this->noRotationPeriods->removeElement($noRotationPeriod)) {
+            // set the owning side to null (unless already changed)
+            if ($noRotationPeriod->getUniversityCalendar() === $this) {
+                $noRotationPeriod->setUniversityCalendar(null);
+            }
+        }
+        return $this;
+    }
+
+       public function getAcademicLevel(): ?AcademicLevel
     {
         return $this->academicLevel;
     }
@@ -138,7 +151,5 @@ class UniversityCalendar
         $this->academicLevel = $academicLevel;
         return $this;
     }
-
-
 
 }

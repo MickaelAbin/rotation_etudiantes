@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\AcademicLevel;
+use App\Entity\NoRotationPeriod;
 use App\Entity\UniversityCalendar;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -43,7 +44,17 @@ class UniversityCalendarType extends AbstractType
                     'label' => false,
                 ]
             ])
-
+            ->add('noRotationPeriods', CollectionType::class, [
+                'label' => 'Périodes sans garde',
+                'entry_type' => NoRotationPeriodType::class,
+                'allow_add' => true,
+                'prototype' => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+                'entry_options' => [
+                    'label' => false,
+                ]
+            ])
 
             ->add('save',SubmitType::class,[
                 'label'=>'Enregistrer',

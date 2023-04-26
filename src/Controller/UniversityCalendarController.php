@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\NoRotationPeriod;
 use App\Entity\PublicHoliday;
 use App\Entity\UniversityCalendar;
 use App\Form\UniversityCalendarType;
@@ -34,6 +35,7 @@ class UniversityCalendarController extends AbstractController
     {
         $universityCalendar = new UniversityCalendar();
         $universityCalendar->addPublicHoliday(new PublicHoliday());
+        $universityCalendar->addNoRotationPeriod(new NoRotationPeriod());
 
         $form = $this->createForm(UniversityCalendarType::class, $universityCalendar);
         $form->handleRequest($request);

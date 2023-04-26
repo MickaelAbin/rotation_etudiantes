@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=PublicHolidayRepository::class)
+ * @ORM\Table(name = "public_holiday")
  */
 class PublicHoliday
 {
@@ -24,7 +25,7 @@ class PublicHoliday
     private ?DateTimeImmutable $date = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity = UniversityCalendar::class, inversedBy = "publicHolidays", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity = UniversityCalendar::class, inversedBy = "publicHolidays", cascade = {"persist"})
      * @ORM\JoinColumn(name = "university_calendar_id", nullable=false, options = {"unsigned": true})
      */
     private ?UniversityCalendar $universityCalendar = null;

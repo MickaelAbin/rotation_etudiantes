@@ -18,7 +18,6 @@
                 </div>
             </div>
             <div class="col-lg-4 col-sm-12">
-
                 <div class="row">
                     {{ form_label(form.publicHolidays) }}
                     {{ form_errors(form.publicHolidays) }}
@@ -31,14 +30,31 @@
                         </div>
                     {% endfor %}
                 </div>
-                    <div>
-                        <button type="button" class="add_item_link btn btn-xl btn-primary rounded" data-collection-holder-class="publicHolidays">
-                            <i class="fa-2x fa-solid fa-plus" title="Ajouter"></i>
-                        </button>
-                    </div>
+                <div>
+                    <button type="button" class="add_item_link btn btn-xl btn-primary rounded" data-collection-holder-class="publicHolidays">
+                        <i class="fa-2x fa-solid fa-plus" title="Ajouter"></i>
+                    </button>
+                </div>
             </div>
             <div class="col-lg-4 col-sm-12">
-
+                <div class="row">
+                    {{ form_label(form.noRotationPeriods) }}
+                    {{ form_errors(form.noRotationPeriods) }}
+                </div>
+                <div class="publicHolidays" data-index="{{ form.noRotationPeriods | length > 0 ? form.noRotationPeriods | last.vars.name + 1 : 0 }}"
+                     data-prototype="{{ form_widget(form.noRotationPeriods.vars.prototype) | e('html_attr')}}">
+                    {% for noRotationPeriods in form.noRotationPeriods %}
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-12 ">{{ form_widget(noRotationPeriods.startDate) }}</div>
+                            <div class="col-lg-6 col-sm-12 ">{{ form_widget(noRotationPeriods.endDate) }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div>
+                    <button type="button" class="add_period_link btn btn-xl btn-primary rounded" data-collection-holder-class="noRotationPeriods">
+                        <i class="fa-2x fa-solid fa-plus" title="Ajouter"></i>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="row justify-content-center">
