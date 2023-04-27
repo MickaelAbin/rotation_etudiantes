@@ -6,15 +6,21 @@
 
 {% block main %}
 
-    <div class="container-fluid">
+    <div class="container-fluid justify-content-around">
         {% form_theme form 'bootstrap_5_layout.html.twig' %}
         {{ form_start(form) }}
         <div class="row">
             <div class="col-lg-4 col-sm-12">
-                {{ form_row(form.academicLevel) }}
+                <div class="row container-fluid p-1">
+                    {{ form_label(form.academicLevel) }}
+                    {{ form_errors(form.academicLevel) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_widget(form.academicLevel) }}
+                </div>
                 <div class="row">
-                    <div class="col-lg-6 col-sm-12 ">{{ form_row(form.startDate) }}</div>
-                    <div class="col-lg-6 col-sm-12 ">{{ form_row(form.endDate) }}</div>
+                    <div class="col-lg-6 col-sm-12">{{ form_row(form.startDate) }}</div>
+                    <div class="col-lg-6 col-sm-12">{{ form_row(form.endDate) }}</div>
                 </div>
             </div>
             <div class="col-lg-4 col-sm-12">
@@ -22,17 +28,22 @@
                     {{ form_label(form.publicHolidays) }}
                     {{ form_errors(form.publicHolidays) }}
                 </div>
-                <div class="publicHolidays" data-index="{{ form.publicHolidays | length > 0 ? form.publicHolidays | last.vars.name + 1 : 0 }}"
-                        data-prototype="{{ form_widget(form.publicHolidays.vars.prototype.date) | e('html_attr')}}">
+                <div class="publicHolidays container-fluid p-1" data-index="{{ form.publicHolidays | length > 0 ? form.publicHolidays | last.vars.name + 1 : 0 }}"
+                        data-prototype="{{ form_widget(form.publicHolidays.vars.prototype) | e('html_attr')}}">
                     {% for publicHolidays in form.publicHolidays %}
-                        <div class="row">
-                            {{ form_row(publicHolidays.date) }}
+                        <div class="row gx-2">
+                            <div class="row col-11 gx-1">{{ form_row(publicHolidays.date) }}</div>
+                            <div class="col-1">
+                                <button type="button" class="btn btn-danger rounded" data-collection-holder-class="publicHolidays">
+                                    <i class="fa-lg fa-solid fa-xmark" title="Supprimer"></i>
+                                </button>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
-                <div>
-                    <button type="button" class="add_item_link btn btn-xl btn-primary rounded" data-collection-holder-class="publicHolidays">
-                        <i class="fa-2x fa-solid fa-plus" title="Ajouter"></i>
+                <div class="row gx-1 d-flex justify-content-end">
+                    <button type="button" class="add_item_link btn btn-primary rounded col-1" data-collection-holder-class="publicHolidays">
+                        <i class="fa-lg fa-solid fa-plus" title="Ajouter"></i>
                     </button>
                 </div>
             </div>
@@ -41,26 +52,33 @@
                     {{ form_label(form.noRotationPeriods) }}
                     {{ form_errors(form.noRotationPeriods) }}
                 </div>
-                <div class="publicHolidays" data-index="{{ form.noRotationPeriods | length > 0 ? form.noRotationPeriods | last.vars.name + 1 : 0 }}"
+                <div class="noRotationPeriods container-fluid p-1" data-index="{{ form.noRotationPeriods | length > 0 ? form.noRotationPeriods | last.vars.name + 1 : 0 }}"
                      data-prototype="{{ form_widget(form.noRotationPeriods.vars.prototype) | e('html_attr')}}">
                     {% for noRotationPeriods in form.noRotationPeriods %}
-                        <div class="row">
-                            <div class="col-lg-6 col-sm-12 ">{{ form_widget(noRotationPeriods.startDate) }}</div>
-                            <div class="col-lg-6 col-sm-12 ">{{ form_widget(noRotationPeriods.endDate) }}</div>
+                        <div class="row gx-2">
+                            <div class="row col-11 gx-1">
+                                {{ form_row(noRotationPeriods.startDate) }}
+                                {{ form_row(noRotationPeriods.endDate) }}
+                            </div>
+                            <div class="col-1">
+                                <button type="button" class="btn btn-danger rounded" data-collection-holder-class="publicHolidays">
+                                    <i class="fa-lg fa-solid fa-xmark" title="Ajouter"></i>
+                                </button>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
-                <div>
-                    <button type="button" class="add_period_link btn btn-xl btn-primary rounded" data-collection-holder-class="noRotationPeriods">
-                        <i class="fa-2x fa-solid fa-plus" title="Ajouter"></i>
+                <div class="row gx-1 d-flex justify-content-end">
+                    <button type="button" class="add_item_link btn btn-xl btn-primary rounded col-1" data-collection-holder-class="noRotationPeriods">
+                        <i class="fa-lg fa-solid fa-plus" title="Ajouter"></i>
                     </button>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-4 row justify-content-center">
-                <div class="col-lg-4 col-sm-12 "><a href="{{ path('university_calendar_index') }}" class="btn btn-primary btn-xl rounded">Annuler</a></div>
-                <div class="col-lg-4 col-sm-12 "> {{ form_row(form.save) }}</div>
+                <div class="col-lg-5 col-sm-12 "><a href="{{ path('university_calendar_index') }}" class="btn py-2 px3 btn-primary rounded">Annuler</a></div>
+                <div class="col-lg-5 col-sm-12 "> {{ form_row(form.save) }}</div>
             </div>
         </div>
     {{ form_end(form) }}

@@ -48,7 +48,7 @@ class UniversityCalendarController extends AbstractController
         }
 
         return $this->renderForm('university_calendar/new.html.twig', [
-            'university_calendar' => $universityCalendar,
+            //'university_calendar' => $universityCalendar,
             'form' => $form,
         ]);
     }

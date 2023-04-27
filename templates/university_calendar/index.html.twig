@@ -25,7 +25,7 @@
                 <td>{{ university_calendar.startDate ? university_calendar.startDate|date('Y-m-d') : '' }}</td>
                 <td>{{ university_calendar.endDate ? university_calendar.endDate|date('Y-m-d') : '' }}</td>
                 <td>{{ university_calendar.publicHolidays ? university_calendar.publicHolidays|json_encode : '' }}</td>
-                <td>{{ university_calendar.daysWithoutRotation ? university_calendar.daysWithoutRotation|json_encode : '' }}</td>
+                <td>{{ university_calendar.noRotationPeriods ? university_calendar.noRotationPeriods|json_encode : '' }}</td>
                 <td>
                     <a href="{{ path('university_calendar_show', {'id': university_calendar.id}) }}">show</a>
                     <a href="{{ path('university_calendar_edit', {'id': university_calendar.id}) }}">edit</a>

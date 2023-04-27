@@ -1,20 +1,41 @@
+const addTagFormDeleteLink = (item) => {
+
+    const faIcon = document.createElement('i')
+    faIcon.classList.add('fa-lg', 'fa-solid', 'fa-xmark')
+    faIcon.setAttribute('title', 'Supprimer')
+
+    const removeFormButton = document.createElement('button')
+    removeFormButton.appendChild(faIcon)
+    removeFormButton.classList.add('btn', 'btn-danger', 'rounded')
+
+    const col = document.createElement('div')
+    col.appendChild(removeFormButton)
+    col.classList.add('col-1')
+
+    item.appendChild(col);
+
+    removeFormButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        item.remove()
+    })
+}
+
 const addFormToCollection = (e) => {
-    const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
-    const item = document.createElement('div');
-    const div = document.createElement('div');
+    const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass)
+    const item = document.createElement('div')
 
-    div.classList.add('row');
-    item.classList.add('mb-3');
+    item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index)
+    item.classList.add('row', 'gx-2')
 
-    item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+    const col10 = item.firstChild
+    col10.classList.add('row', 'col-11', 'gx-1')
 
-
-    div.appendChild(item);
-    collectionHolder.appendChild(div);
-    collectionHolder.dataset.index++;
+    addTagFormDeleteLink(item)
+    collectionHolder.appendChild(item)
+    collectionHolder.dataset.index++
 }
 
 document.querySelectorAll('.add_item_link')
     .forEach(btn => {
-        btn.addEventListener("click", addFormToCollection);
+        btn.addEventListener("click", addFormToCollection)
     })

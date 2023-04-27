@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass = NoRotationPeriodRepository::class)
- * @ORM\Table(name = "no_rotation_period")
+ * @ORM\Table(name = "no_rotation_periods")
  */
 class NoRotationPeriod
 {

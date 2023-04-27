@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NoRotationPeriodType extends AbstractType
 {
-    public function buildform(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('startDate', DateType::class, [
@@ -18,12 +18,19 @@ class NoRotationPeriodType extends AbstractType
                 'widget' => 'single_text',
                 'label'=> false,
                 'required' => false,
+                'row_attr' => [
+                    'class' => 'col-lg-6 col-sm-12 mb-3'
+                ]
             ])
+
             ->add('endDate', DateType::class, [
                 'input' => 'datetime_immutable',
                 'widget' => 'single_text',
                 'label'=> false,
                 'required' => false,
+                'row_attr' => [
+                    'class' => 'col-lg-6 col-sm-12 mb-3'
+                ]
             ])
         ;
     }
