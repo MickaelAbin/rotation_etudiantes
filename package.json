@@ -1,0 +1,7 @@
+{
+  "name": "clinical-rotations",
+  "version": "1.0.0",
+  "dependencies": {
+    "@fullcalendar/list": "^6.1.6"
+  }
+}

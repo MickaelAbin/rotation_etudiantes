@@ -35,7 +35,7 @@ class Student
     private ?string $email = null;
 
     /**
-     * @ORM\Column(name = "is_on_rotation_schedule", type = "boolean", nullable = false)
+     * @ORM\Column(name = "is_on_rotation_schedule", type = "boolean", nullable = true)
      */
     private ?bool $isOnRotationSchedule = null;
 

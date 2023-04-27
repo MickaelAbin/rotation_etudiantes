@@ -37,7 +37,6 @@ class HomeController extends AbstractController
                 'backgroundColor'=>$event->getClinicalRotationCategory()->getColor(),
                 'description'=>$event->getClinicalRotationCategory()->getLabel(),
 
-
             ];
         }
         $data = json_encode($creneaux);
