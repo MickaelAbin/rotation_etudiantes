@@ -2,9 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\AcademicLevel;
+use App\Entity\ClinicalRotationCategory;
+use App\Entity\Enrolment;
 use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Container\ContainerInterface;
 
@@ -45,19 +49,28 @@ class StudentRepository extends ServiceEntityRepository
     }
 
 
-//    public function trouverLesDixPremiers()
+//    public function listByAcademicLevel()
 //    {
+//        $qb = $this->createQueryBuilder('s');
+//        $qb->where('s.academicLevel = :academic_level_id');
+//        $qb->setParameter('academic_level_id', 2);
 //
-//        return $this
-//            ->container->get('doctrine')
-//            ->getManager('moodle')
-//            ->createQueryBuilder('s')
-//            ->select('s.id')
-//            ->setMaxResults(5)
-//            ->getQuery()
-//            ->getResult();
-//
+//        return $qb->getQuery()->getResult();
 //    }
+    public function listByAcademicLevel()
+    {
+        return $this->createQueryBuilder('student')
+//            ->select('student', 'enrolment', 'category')
+            ->innerJoin(Enrolment::class,'enrolment', Join::WITH, 'student.moodleUserID = enrolment.student')
+            ->innerJoin(ClinicalRotationCategory::class,'category', Join::WITH, 'enrolment.clinicalRotationCategory = category.id')
+            ->where('student.academicLevel = :academic_level_id')
+            ->setParameter('academic_level_id', 4)
+            ->orderBy('student.lastName', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+    }
+
 //    **
 //     * @return Student[] Returns an array of Student objects
 //     */
