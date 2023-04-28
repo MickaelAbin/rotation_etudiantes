@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
-
+{% block h2 %}
+    Liste des catégories de garde
+{% endblock %}
 
 {% block main %}
-    <h1>Liste des catégories de garde</h1>
-
-    <table class="table">
+<div>
+    <div>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
@@ -12,9 +14,10 @@
                 <th>Promotion</th>
                 <th>Heure de début</th>
                 <th>Heure de fin</th>
-                <th>Nombre d'étudiant</th>
+                <th>Nombre d'étudiant(s)</th>
                 <th>Week end</th>
-                <th>actions</th>
+                <th>Couleur</th>
+                <th>
             </tr>
         </thead>
         <tbody>
@@ -27,9 +30,9 @@
                 <td>{{ clinical_rotation_category.endTime ? clinical_rotation_category.endTime|date('H:i') : '' }}</td>
                 <td>{{ clinical_rotation_category.nbStudents }}</td>
                 <td>{{ clinical_rotation_category.isOnWeekend ? 'Oui' : 'Non' }}</td>
+                <td><span style="background-color: {{ clinical_rotation_category.color }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
                 <td>
-                    <a href="{{ path('app_clinical_rotation_category_show', {'id': clinical_rotation_category.id}) }}">voir</a>
-                    <a href="{{ path('app_clinical_rotation_category_edit', {'id': clinical_rotation_category.id}) }}">modifier</a>
+                    <a href="{{ path('app_clinical_rotation_category_edit', {'id': clinical_rotation_category.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -39,6 +42,9 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_clinical_rotation_category_new') }}">Create new</a>
+    </div>
+    <div>
+        <div class="col-lg-5 col-sm-12 "><a href="{{ path('app_clinical_rotation_category_new') }}" class="btn py-2 px3 btn-primary rounded">Creation nouvelle</a></div>
+    </div>
+</div>
 {% endblock %}

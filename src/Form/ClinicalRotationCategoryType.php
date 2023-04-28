@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
@@ -45,11 +46,14 @@ class ClinicalRotationCategoryType extends AbstractType
             ->add('academicLevel',EntityType::class,[
                 'class'=>AcademicLevel::class,
                 'choice_label'=>'label',
-                'label'=>'Promotion : '
+                'label'=>'Promotion : ',
             ])
 
             ->add('color',ColorType::class,[
-                'label'=>'Couleur : '
+                'label'=>'Couleur : ',
+            ])
+            ->add('save',SubmitType::class,[
+                'label'=>'Enregistrer',
             ])
         ;
     }
