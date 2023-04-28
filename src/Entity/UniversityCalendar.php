@@ -37,12 +37,12 @@ class UniversityCalendar
 
 
     /**
-     * @ORM\OneToMany(targetEntity = PublicHoliday::class, mappedBy = "universityCalendar", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity = PublicHoliday::class, mappedBy = "universityCalendar", cascade = {"persist"}, orphanRemoval = true)
      */
     private Collection $publicHolidays;
 
     /**
-     * @ORM\OneToMany(targetEntity = NoRotationPeriod::class, mappedBy = "universityCalendar", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity = NoRotationPeriod::class, mappedBy = "universityCalendar", cascade = {"persist"}, orphanRemoval = true)
      */
     private Collection $noRotationPeriods;
 

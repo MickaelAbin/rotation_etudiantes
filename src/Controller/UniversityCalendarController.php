@@ -54,7 +54,7 @@ class UniversityCalendarController extends AbstractController
     }
 
     /**
-     * @Route(path = "/{id}", name = "show", methods = {"GET"})
+     * @Route(path = "{id}", name = "show", methods = {"GET"})
      */
     public function show(UniversityCalendar $universityCalendar): Response
     {
@@ -64,7 +64,7 @@ class UniversityCalendarController extends AbstractController
     }
 
     /**
-     * @Route(path = "/{id}/edit", name = "edit", methods = {"GET", "POST"})
+     * @Route(path = "{id}/edit", name = "edit", methods = {"GET", "POST"})
      */
     public function edit(Request $request, UniversityCalendar $universityCalendar, UniversityCalendarRepository $universityCalendarRepository): Response
     {

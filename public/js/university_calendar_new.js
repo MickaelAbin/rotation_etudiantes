@@ -39,3 +39,7 @@ document.querySelectorAll('.add_item_link')
     .forEach(btn => {
         btn.addEventListener("click", addFormToCollection)
     })
+document.querySelectorAll('div.noRotationPeriods div.gx-2, div.publicHolidays div.gx-2')
+    .forEach((element) => {
+        addTagFormDeleteLink(element)
+    })

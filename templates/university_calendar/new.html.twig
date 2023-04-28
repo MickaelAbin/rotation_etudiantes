@@ -33,11 +33,6 @@
                     {% for publicHolidays in form.publicHolidays %}
                         <div class="row gx-2">
                             <div class="row col-11 gx-1">{{ form_row(publicHolidays.date) }}</div>
-                            <div class="col-1">
-                                <button type="button" class="btn btn-danger rounded" data-collection-holder-class="publicHolidays">
-                                    <i class="fa-lg fa-solid fa-xmark" title="Supprimer"></i>
-                                </button>
-                            </div>
                         </div>
                     {% endfor %}
                 </div>
@@ -59,11 +54,6 @@
                             <div class="row col-11 gx-1">
                                 {{ form_row(noRotationPeriods.startDate) }}
                                 {{ form_row(noRotationPeriods.endDate) }}
-                            </div>
-                            <div class="col-1">
-                                <button type="button" class="btn btn-danger rounded" data-collection-holder-class="publicHolidays">
-                                    <i class="fa-lg fa-solid fa-xmark" title="Ajouter"></i>
-                                </button>
                             </div>
                         </div>
                     {% endfor %}
