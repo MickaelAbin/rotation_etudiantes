@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enrolment{% endblock %}
+
+{% block body %}
+    <h1>Enrolment</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ enrolment.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ enrolment.date ? enrolment.date|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_enrolment_index') }}">back to list</a>
+
+    <a href="{{ path('app_enrolment_edit', {'id': enrolment.id}) }}">edit</a>
+
+    {{ include('enrolment/_delete_form.html.twig') }}
+{% endblock %}

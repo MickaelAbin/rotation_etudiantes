@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Enrolment{% endblock %}
+
+{% block body %}
+    <h1>Create new Enrolment</h1>
+
+    {{ include('enrolment/_form.html.twig') }}
+
+    <a href="{{ path('app_enrolment_index') }}">back to list</a>
+{% endblock %}

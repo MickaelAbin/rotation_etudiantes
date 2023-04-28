@@ -10,6 +10,7 @@ window.onload = () => {
         initialView : 'dayGridMonth',
         locale: 'fr',
         firstDay : 1,
+        dayHeaderFormat : {weekday : 'long'},
         timeZone: 'Europe/Paris',
         headerToolbar : {
             start: 'prev,next today',
