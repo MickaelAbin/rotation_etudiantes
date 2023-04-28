@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass = UserRepository::class)
@@ -16,22 +17,28 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     /**
+     * @Assert\NotBlank(message = "L'ID Moodle est obligatoire")
+     * @Assert\Type(type = "integer", message = "")
      * @ORM\Id
      * @ORM\Column(name = "moodle_user_id", type = "bigint", options = {"unsigned": true})
      */
     protected ?int $moodleUserID = null;
 
     /**
+     * @Assert\NotBlank(message = "Le prénom est obligatoire")
      * @ORM\Column(name = "first_name", type = "string", length = 50, nullable = false)
      */
     protected ?string $firstName = null;
 
     /**
+     * @Assert\NotBlank(message = "Le nom de famille est obligatoire")
      * @ORM\Column(name = "last_name", type = "string", length = 50, nullable = false)
      */
     protected ?string $lastName = null;
 
     /**
+     * @Assert\NotBlank(message = "L'email est obligatoire")
+     * @Assert\Email(message = "L'email n'est pas dans un format valide")
      * @ORM\Column(name = "email", type = "string", length = 255, nullable = false)
      */
     protected ?string $email = null;
@@ -46,9 +53,15 @@ class User implements UserInterface
         return $this->firstName . strtoupper($this->lastName);
     }
 
-    public function getMoodleUserId(): int
+    public function getMoodleUserId(): ?int
     {
         return $this->moodleUserID;
+    }
+
+    public function setMoodleUserId(int $moodleUserID): self
+    {
+        $this->moodleUserID = $moodleUserID;
+        return $this;
     }
 
     /**
@@ -100,7 +113,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_ADMIN';
         return array_unique($roles);
     }
 

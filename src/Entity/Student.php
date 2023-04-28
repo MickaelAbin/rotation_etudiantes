@@ -6,6 +6,7 @@ use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass = StudentRepository::class)
@@ -23,14 +24,26 @@ class Student extends User
     private Collection $enrolments;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity = AcademicLevel::class, inversedBy = "students")
-     * @ORM\JoinColumn(name = "academic_level_id", nullable = false, options = {"unsigned": true})
+     * @ORM\JoinColumn(name = "academic_level_id", nullable = true, options = {"unsigned": true})
      */
     private ?AcademicLevel $academicLevel = null;
 
     public function __construct()
     {
         $this->enrolments = new ArrayCollection();
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_STUDENT';
+        return array_unique($roles);
     }
 
     public function isIsOnRotationSchedule(): ?bool
