@@ -27,8 +27,8 @@ const addFormToCollection = (e) => {
     item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index)
     item.classList.add('row', 'gx-2')
 
-    const col10 = item.firstChild
-    col10.classList.add('row', 'col-11', 'gx-1')
+    const col = item.firstChild
+    col.classList.add('row', 'col-11', 'gx-1')
 
     addTagFormDeleteLink(item)
     collectionHolder.appendChild(item)
