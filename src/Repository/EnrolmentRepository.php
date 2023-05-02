@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\ClinicalRotationCategory;
 use App\Entity\Enrolment;
+use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * @extends ServiceEntityRepository<Enrolment>
@@ -63,4 +66,16 @@ class EnrolmentRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function listByDate()
+    {
+        return $this->createQueryBuilder('enrolment')
+            ->innerJoin(Student::class,'student', Join::WITH, 'enrolment.student = student.moodleUserID  ')
+            ->innerJoin(ClinicalRotationCategory::class,'category', Join::WITH, 'enrolment.clinicalRotationCategory = category.id')
+            ->where('student.academicLevel = :academic_level_id')
+            ->setParameter('academic_level_id', 4)
+            ->getQuery()
+            ->getResult();
+
+    }
 }
