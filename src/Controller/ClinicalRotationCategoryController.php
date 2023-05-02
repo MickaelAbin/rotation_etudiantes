@@ -77,7 +77,7 @@ class ClinicalRotationCategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_clinical_rotation_category_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="app_clinical_rotation_category_delete", methods={"POST"})
      */
     public function delete(Request $request, ClinicalRotationCategory $clinicalRotationCategory, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository): Response
     {

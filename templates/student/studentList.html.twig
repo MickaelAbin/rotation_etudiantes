@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-
-{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block h2 %}Liste par étudiant{% endblock %}
 
 {% block main %}
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
         <tr>
             <th>Nom</th>
@@ -20,7 +19,7 @@
                 <td>{{ student.lastName }} {{ student.firstName }}</td>
                 <td>{{ student.enrolments | length }}</td>
                 {% for enrolment in student.enrolments %}
-                <td style="background-color: {{ enrolment.ClinicalRotationCategory.color }};">
+                <td style="background-color: {{ enrolment.ClinicalRotationCategory.color }};color: white;">
                     {{ enrolment.date ? enrolment.date|date('l j F Y')|replace({'Monday': 'Lundi', 'Tuesday': 'Mardi', 'Wednesday': 'Mercredi', 'Thursday': 'Jeudi', 'Friday': 'Vendredi', 'Saturday': 'Samedi', 'Sunday': 'Dimanche', 'January': 'Janvier', 'February': 'Février', 'March': 'Mars', 'April': 'Avril', 'May': 'Mai', 'June': 'Juin', 'July': 'Juillet', 'August': 'Août', 'September': 'Septembre', 'October': 'Octobre', 'November': 'Novembre', 'December': 'Décembre'}) : '' }}
                 </td>
                 </td>

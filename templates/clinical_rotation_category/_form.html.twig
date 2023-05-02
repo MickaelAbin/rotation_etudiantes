@@ -10,25 +10,41 @@
             <div class="mb-2">
                 {{ form_widget(form.label) }}
             </div>
-            <div class="row container-fluid p-1">
-                {{ form_label(form.startTime) }}
-                {{ form_errors(form.startTime) }}
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-sm-12">
+                    <div class="row container-fluid p-1">
+                        {{ form_label(form.startTime) }}
+                        {{ form_errors(form.startTime) }}
+                    </div>
+                    <div class="mb-2">
+                        {{ form_widget(form.startTime) }}
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <div class="row container-fluid p-1">
+                        {{ form_label(form.endTime) }}
+                        {{ form_errors(form.endTime) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_widget(form.endTime) }}
+                    </div>
+                </div>
             </div>
-            <div class="mb-2">
-                {{ form_widget(form.startTime) }}
+            <div class="container-fluid align-content-center col-8">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="row container-fluid p-1">
+                            {{ form_label(form.color) }}
+                            {{ form_errors(form.color) }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="mb-3">
+                            {{ form_widget(form.color) }}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="row container-fluid p-1">
-                {{ form_label(form.endTime) }}
-                {{ form_errors(form.endTime) }}
-            </div>
-            <div class="mb-3">
-                {{ form_widget(form.endTime) }}
-            </div>
-            <div class="row container-fluid p-1">
-                {{ form_label(form.color) }}
-                {{ form_errors(form.color) }}
-            </div>
-
         </div>
         <div class="col-lg-6 col-sm-12">
             <div class="row container-fluid p-1">
@@ -45,27 +61,34 @@
             <div class="mb-3">
                 {{ form_widget(form.isOnWeekend) }}
             </div>
-            <div class="row container-fluid p-1">
-                {{ form_label(form.academicLevel) }}
-                {{ form_errors(form.academicLevel) }}
-            </div>
-            <div class="mb-3">
-                {{ form_widget(form.academicLevel) }}
+            <div class="container-fluid align-content-center col-8">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="row container-fluid p-1">
+                            {{ form_label(form.academicLevel) }}
+                            {{ form_errors(form.academicLevel) }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="mb-3">
+                            {{ form_widget(form.academicLevel) }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="mb-3">
-                {{ form_widget(form.color) }}
-            </div>
         </div>
 
     </div>
-        <div class="text-center">
-            <div class="col-12 row justify-content-center">
-                <div class="col-lg-6 col-sm-12 "><a href="{{ path('app_clinical_rotation_category_index') }}" class="btn py-2 px3 btn-primary rounded">Retour</a></div>
-                <div class="col-lg-6 col-sm-12 "> {{ form_row(form.save) }}</div>
-            </div>
-        </div>
+    <div class="text-center">
+        <div class="col-12 row justify-content-center">
+            <div class="col-lg-4 col-sm-12 "><a href="{{ path('app_clinical_rotation_category_index') }}"
+                                                class="btn py-2 px3 btn-primary rounded">Retour</a></div>
+            <div class="col-lg-4 col-sm-12 "> {{ form_row(form.save) }}</div>
+            {{ form_end(form) }}
 
-    {{ form_end(form) }}
+        </div>
+    </div>
+
 
 </div>

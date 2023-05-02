@@ -4,14 +4,99 @@
 {% block h2 %}Modification d'une catégorie de garde{% endblock %}
 
 {% block main %}
-    <div class="d-flex justify-content-around">
+    <div class="container-fluid align-content-center col-8">
+        {% form_theme form 'bootstrap_5_layout.html.twig' %}
+        {{ form_start(form) }}
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-sm-12">
+                <div class="row container-fluid p-1">
+                    {{ form_label(form.academicLevel) }}
+                    {{ form_errors(form.academicLevel) }}
+                </div>
+                <div class="mb-2">
+                    {{ form_widget(form.academicLevel) }}
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="row container-fluid p-1">
+                            {{ form_label(form.startTime) }}
+                            {{ form_errors(form.startTime) }}
+                        </div>
+                        <div class="mb-2">
+                            {{ form_widget(form.startTime) }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="row container-fluid p-1">
+                            {{ form_label(form.endTime) }}
+                            {{ form_errors(form.endTime) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_widget(form.endTime) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid align-content-center col-8">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="row container-fluid p-1">
+                                {{ form_label(form.color) }}
+                                {{ form_errors(form.color) }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="mb-3">
+                                {{ form_widget(form.color) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <div class="row container-fluid p-1">
+                    {{ form_label(form.label) }}
+                    {{ form_errors(form.label) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_widget(form.label) }}
+                </div>
+                <div class="row container-fluid p-1">
+                    {{ form_label(form.isOnWeekend) }}
+                    {{ form_errors(form.isOnWeekend) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_widget(form.isOnWeekend) }}
+                </div>
+                <div class="container-fluid align-content-center col-8">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="row container-fluid p-1">
+                                {{ form_label(form.nbStudents) }}
+                                {{ form_errors(form.nbStudents) }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="mb-3">
+                                {{ form_widget(form.nbStudents) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
         <div class="text-center">
-        {{ include('clinical_rotation_category/_form.html.twig', {'button_label': 'Update'}) }}
+            <div class="col-12 row justify-content-center">
+                <div class="col-lg-4 col-sm-12 "><a href="{{ path('app_clinical_rotation_category_index') }}"
+                                                    class="btn py-2 px3 btn-primary rounded">Retour</a></div>
+                <div class="col-lg-4 col-sm-12 "> {{ form_row(form.save) }}</div>
+                {{ form_end(form) }}
+                <div class="col-lg-4 col-sm-12 ">  {{ include('clinical_rotation_category/_delete_form.html.twig') }}</div>
+            </div>
         </div>
 
-        <div class="ms-auto d-flex justify-content-end">
-        {{ include('clinical_rotation_category/_delete_form.html.twig') }}
-        </div>
+
     </div>
 
 {% endblock %}
