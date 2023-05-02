@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ parent() }}{% endblock %}
+{% block h2 %}Calendrier{% endblock %}
 
 
 
-{% block title %}Calendrier{% endblock %}
 {% block stylesheets%}
     <link rel="stylesheet" href="{{ asset('css/calendrier.css') }}">
 

@@ -37,12 +37,36 @@ class HomeController extends AbstractController
                 'backgroundColor'=>$event->getClinicalRotationCategory()->getColor(),
                 'description'=>$event->getClinicalRotationCategory()->getLabel(),
 
+
             ];
         }
         $data = json_encode($creneaux);
         return $this->render('home/calendrier.html.twig', compact('data'));
     }
 
+
+    /**
+     * @Route(path = "/listeParDate", name = "listeParDate")
+     */
+    public function listeParDate(EnrolmentRepository $enrolmentRepository)
+    {
+        $events = $enrolmentRepository->listByDate();
+        $creneaux=[];
+        foreach ($events as $event){
+            $creneaux[]=[
+                'id'=>$event->getId(),
+                'date'=>$event->getDate()->format('Y-m-d'),
+                'title'=>($event->getStudent()->getLastName())." ".($event->getStudent()->getFirstName()." ".($event->getClinicalRotationCategory()->getLabel())),
+                'backgroundColor'=>$event->getClinicalRotationCategory()->getColor(),
+                'description'=>$event->getClinicalRotationCategory()->getLabel(),
+//                'startTime'=>$event->getClinicalRotationCategory()->getStartTime(),
+//                'endTime'=>$event->getClinicalRotationCategory()->getEndTime(),
+
+            ];
+        }
+        $data = json_encode($creneaux);
+        return $this->render('home/listeParDateCalendrier.html.twig', compact('data'));
+    }
 //    /**
 //     * @Route(path = "/moodle", name = "moodle")
 //     */

@@ -2,3 +2,6 @@
     width: 80%;
     margin : auto;
 }
+.fc-list-event-time {
+    display:none;
+}

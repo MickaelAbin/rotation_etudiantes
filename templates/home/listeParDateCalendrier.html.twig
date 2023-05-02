@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ parent() }}{% endblock %}
+{% block h2 %}Liste par date{% endblock %}
 
 
 
-{% block title %}Calendrier{% endblock %}
 {% block stylesheets%}
     <link rel="stylesheet" href="{{ asset('css/calendrier.css') }}">
 
@@ -18,7 +19,8 @@
 {% endblock %}
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js" integrity="sha256-dHUNnePy81fXq4D/wfu7cPsEIP7zl6MvLb84jtZf+UY=" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/calendrier.js') }}"></script>
+    <script src="{{ asset('js/listeParDate.js') }}"></script>
 {% endblock %}
+
 
 
