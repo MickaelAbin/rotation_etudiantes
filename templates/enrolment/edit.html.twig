@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Enrolment{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block h2 %}Modification d'un créneau de garde{% endblock %}
+{% block main %}
 
-{% block body %}
-    <h1>Edit Enrolment</h1>
 
     {{ include('enrolment/_form.html.twig', {'button_label': 'Update'}) }}
 

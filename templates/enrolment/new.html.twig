@@ -1,11 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Enrolment{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block h2 %}Création d'un créneau de garde{% endblock %}
+{% block main %}
+<div class="container-fluid align-content-center col-8">
+    {% form_theme form 'bootstrap_5_layout.html.twig' %}
+    {{ form_start(form) }}
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-sm-12">
+            <div class="row container-fluid p-1">
+                {{ form_label(form.date) }}
+                {{ form_errors(form.date) }}
+            </div>
+            <div class="mb-2">
+                {{ form_widget(form.date) }}
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+            <div class="row container-fluid p-1">
+                {{ form_label(form.clinicalRotationCategory) }}
+                {{ form_errors(form.clinicalRotationCategory) }}
+            </div>
+            <div class="mb-2">
+                {{ form_widget(form.clinicalRotationCategory) }}
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+            <div class="row container-fluid p-1">
+                {{ form_label(form.student) }}
+                {{ form_errors(form.student) }}
+            </div>
+            <div class="mb-2">
+                {{ form_widget(form.student) }}
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <div class="col-12 row justify-content-center">
+            <div class="col-lg-4 col-sm-12 "><a href="{{ path('app_enrolment_index') }}"
+                                                class="btn py-2 px3 btn-primary rounded">Retour</a></div>
+            <div class="col-lg-4 col-sm-12 "> {{ form_row(form.save) }}</div>
+            {{ form_end(form) }}
 
-{% block body %}
-    <h1>Create new Enrolment</h1>
+        </div>
+    </div>
+</div>
 
-    {{ include('enrolment/_form.html.twig') }}
-
-    <a href="{{ path('app_enrolment_index') }}">back to list</a>
 {% endblock %}
