@@ -12,7 +12,7 @@ window.onload = () => {
         dayHeaderFormat : {weekday : 'long'},
         timeZone: 'Europe/Paris',
         headerToolbar : {
-            start: 'prev,next today',
+            start: 'prev,next',
             center:'title',
             end: 'today'
         },

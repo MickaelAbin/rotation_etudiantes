@@ -1,28 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Enrolment index{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block h2 %}Liste des gardes{% endblock %}
 
 {% block main %}
-    <h1>Enrolment index</h1>
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Date</th>
                 <th>Etudiant</th>
-                <th>actions</th>
+                <th>Categorie de gardes</th>
+
             </tr>
         </thead>
         <tbody>
         {% for enrolment in enrolments %}
             <tr>
-                <td>{{ enrolment.id }}</td>
-                <td>{{ enrolment.date ? enrolment.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td> {{ enrolment.date ? enrolment.date|date('l j F Y')|replace({'Monday': 'Lundi', 'Tuesday': 'Mardi', 'Wednesday': 'Mercredi', 'Thursday': 'Jeudi', 'Friday': 'Vendredi', 'Saturday': 'Samedi', 'Sunday': 'Dimanche', 'January': 'Janvier', 'February': 'Février', 'March': 'Mars', 'April': 'Avril', 'May': 'Mai', 'June': 'Juin', 'July': 'Juillet', 'August': 'Août', 'September': 'Septembre', 'October': 'Octobre', 'November': 'Novembre', 'December': 'Décembre'}) : '' }}</td>
                 <td>{{ enrolment.student.firstName}}  {{enrolment.student.lastName }}</td>
-                <td>
-                    <a href="{{ path('app_enrolment_show', {'id': enrolment.id}) }}">show</a>
-                    <a href="{{ path('app_enrolment_edit', {'id': enrolment.id}) }}">edit</a>
+                <td style="background-color: {{ enrolment.ClinicalRotationCategory.color }};color: white;">
+                    {{ enrolment.ClinicalRotationCategory.label }}
                 </td>
             </tr>
         {% else %}
