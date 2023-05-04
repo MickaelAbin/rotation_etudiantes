@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block main %}
+
+    <h1>Liste d'utilisateurs mélangée par academic level</h1>
+
+    {% for user in users %}
+        <p>{{ user.firstName }} {{ user.lastName }} ({{ user.email }})</p>
+    {% endfor %}
+{% endblock %}
+

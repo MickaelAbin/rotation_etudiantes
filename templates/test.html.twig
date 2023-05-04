@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block main %}
+    {% for day in availableDays %}
+        {{ day|date('Y-m-d') }} <br>
+
+
+    {% endfor %}
+{% endblock %}
+
