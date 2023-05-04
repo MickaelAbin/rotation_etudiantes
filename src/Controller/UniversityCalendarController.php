@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route(path = "/university-calendar/", name = "university_calendar_")
+ * @Route(path = "/admin/university-calendar/", name = "university_calendar_")
  */
 class UniversityCalendarController extends AbstractController
 {

@@ -1,0 +1,29 @@
+/*
+   Palette couleur ONIRIS (CMYK, hex)
+   - Vert :         55,0,90,0   /   #84BD00
+   - Bleu azur :    62,28,0,0   /   #6CACE4
+   - Bleu moyen :   100,70,5,0  /   #0047BB
+   - Noir :         0,0,0,100   /   #FFFFFF
+
+   Palette couleur colorhunt
+   - Gris clair :       #F7FBFC
+   - Gris :             #D6E6F2
+   - Bleu-gris :        #B9D7EA
+   - Bleu :             #769FCD
+   - Bleu moyen :       #0047BB
+
+*/
+
+:root {
+    /* sidebar */
+    --sidebar-bg: #D6E6F2;
+    --sidebar-menu-active-item-bg: #769FCD;
+    --sidebar-menu-active-item-color: #0047BB;
+    --sidebar-menu-header-color: #84BD00;
+
+    /* body CSS */
+    --body-bg: #F7FBFC;
+    --button-active-color: #769FCD;
+}
+
+
