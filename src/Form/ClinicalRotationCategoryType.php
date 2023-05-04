@@ -58,6 +58,7 @@ class ClinicalRotationCategoryType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ClinicalRotationCategory::class,
+            // TODO retirer required false
             'required' => false,
         ]);
     }

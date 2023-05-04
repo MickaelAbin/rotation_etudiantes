@@ -1,0 +1,28 @@
+html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+
+body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: auto;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+section {
+    flex: auto;
+}
+
+#footer {
+    margin-top: auto;
+}
