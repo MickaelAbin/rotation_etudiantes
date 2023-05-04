@@ -33,7 +33,7 @@
                 <td>{{ clinical_rotation_category.isOnWeekend ? 'Oui' : 'Non' }}</td>
                 <td><span style="background-color: {{ clinical_rotation_category.color }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
                 <td>
-                    <a href="{{ path('app_clinical_rotation_category_edit', {'id': clinical_rotation_category.id}) }}">Modifier</a>
+                    <a href="{{ path('clinical-rotation-category_edit', {'id': clinical_rotation_category.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -45,7 +45,7 @@
     </table>
     </div>
     <div>
-        <div class="col-lg-5 col-sm-12 "><a href="{{ path('app_clinical_rotation_category_new') }}" class="btn py-2 px3 btn-primary rounded">Creation nouvelle</a></div>
+        <div class="col-lg-5 col-sm-12 "><a href="{{ path('clinical-rotation-category_new') }}" class="btn py-2 px3 btn-primary rounded">Creation nouvelle</a></div>
     </div>
 </div>
 {% endblock %}

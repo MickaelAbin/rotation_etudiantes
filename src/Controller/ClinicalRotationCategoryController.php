@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/clinical/rotation/category")
+ * @Route("/clinical-rotation-category/", name = "clinical-rotation-category_" )
  */
 class ClinicalRotationCategoryController extends AbstractController
 {
     /**
-     * @Route("/", name="app_clinical_rotation_category_index", methods={"GET"})
+     * @Route("", name="index", methods={"GET"})
      */
     public function index(ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository): Response
     {
@@ -26,7 +26,7 @@ class ClinicalRotationCategoryController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="app_clinical_rotation_category_new", methods={"GET", "POST"})
+     * @Route("new", name="new", methods={"GET", "POST"})
      */
     public function new(Request $request, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository): Response
     {
@@ -37,7 +37,7 @@ class ClinicalRotationCategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $clinicalRotationCategoriesRepository->add($clinicalRotationCategory, true);
 
-            return $this->redirectToRoute('app_clinical_rotation_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('clinical-rotation-category_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('clinical_rotation_category/new.html.twig', [
@@ -47,7 +47,7 @@ class ClinicalRotationCategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_clinical_rotation_category_show", methods={"GET"})
+     * @Route("{id}", name="show", methods={"GET"})
      */
     public function show(ClinicalRotationCategory $clinicalRotationCategory): Response
     {
@@ -57,7 +57,7 @@ class ClinicalRotationCategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="app_clinical_rotation_category_edit", methods={"GET", "POST"})
+     * @Route("{id}/edit", name="edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, ClinicalRotationCategory $clinicalRotationCategory, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository): Response
     {
@@ -67,7 +67,7 @@ class ClinicalRotationCategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $clinicalRotationCategoriesRepository->add($clinicalRotationCategory, true);
 
-            return $this->redirectToRoute('app_clinical_rotation_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('clinical-rotation-category_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('clinical_rotation_category/edit.html.twig', [
@@ -77,7 +77,7 @@ class ClinicalRotationCategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name="app_clinical_rotation_category_delete", methods={"POST"})
+     * @Route("{id}/delete", name="delete", methods={"POST"})
      */
     public function delete(Request $request, ClinicalRotationCategory $clinicalRotationCategory, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository): Response
     {
@@ -85,6 +85,6 @@ class ClinicalRotationCategoryController extends AbstractController
             $clinicalRotationCategoriesRepository->remove($clinicalRotationCategory, true);
         }
 
-        return $this->redirectToRoute('app_clinical_rotation_category_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('clinical-rotation-category_index', [], Response::HTTP_SEE_OTHER);
     }
 }

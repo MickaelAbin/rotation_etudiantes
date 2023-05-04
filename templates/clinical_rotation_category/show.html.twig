@@ -38,9 +38,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_clinical_rotation_category_index') }}">back to list</a>
+    <a href="{{ path('clinical-rotation-category_index') }}">back to list</a>
 
-    <a href="{{ path('app_clinical_rotation_category_edit', {'id': clinical_rotation_category.id}) }}">edit</a>
+    <a href="{{ path('clinical-rotation-category_edit', {'id': clinical_rotation_category.id}) }}">edit</a>
 
     {{ include('clinical_rotation_category/_delete_form.html.twig') }}
 {% endblock %}

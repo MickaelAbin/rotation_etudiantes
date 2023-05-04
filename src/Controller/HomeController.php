@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 
+use App\Entity\AcademicLevel;
+use App\Entity\UniversityCalendar;
 use App\Repository\EnrolmentRepository;
+use App\Service\GuardScheduler;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -74,5 +77,25 @@ class HomeController extends AbstractController
 //    {
 //        $connection = $this->managerRegistry->getConnection('mdl_user');
 //    }
+    /**
+     * @Route(path = "/test", name = "test")
+     */
+    public function test(GuardScheduler $guardScheduler)
+    {
+        $universityCalendar = $this->getDoctrine()->getRepository(UniversityCalendar::class)->find(1);
+        $availableDays = $guardScheduler->createAvailableDaysArray($universityCalendar);
 
+        return $this->render('test.html.twig',['availableDays'=> $availableDays]);
+    }
+    /**
+     * @Route("/users/{academicLevelId}/shuffle", name="user_shuffle")
+     */
+    public function test2(GuardScheduler $guardScheduler, int $academicLevelId): Response
+    {
+        $users = $guardScheduler->shuffleUsersByAcademicLevel($academicLevelId);
+
+        return $this->render('test2.html.twig', [
+            'users' => $users,
+        ]);
+    }
 }
