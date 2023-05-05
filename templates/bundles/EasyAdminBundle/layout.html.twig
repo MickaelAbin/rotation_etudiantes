@@ -5,3 +5,10 @@
         <img src="{{ asset('assets/oniris_logo.png') }}" alt="">
     </div>
 {% endblock %}
+
+{% block body_javascript %}
+    <footer class="bg-dark small text-center text-white-50 p-4" id="footer">
+        <div class="container p-1">&copy; Oniris, Nantes | Pôle Applicatif 2023</div>
+    </footer>
+    {{ parent() }}
+{% endblock %}

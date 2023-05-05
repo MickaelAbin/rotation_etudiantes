@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\ClinicalRotationCategory;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -41,6 +43,21 @@ class ClinicalRotationCategoryCrudController extends AbstractCrudController
         return $filters
             ->add(EntityFilter::new('academicLevel', 'Promotion'))
         ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->update(Crud::PAGE_INDEX, Action::NEW,
+                fn (Action $action) => $action->linkToRoute('university_calendar_new'))
+            ->update(Crud::PAGE_INDEX, Action::EDIT,
+                fn (Action $action) => $action->linkToRoute('university_calendar_edit',
+                    function (UniversityCalendar $universityCalendar): array {
+                        return [
+                            'id' => $universityCalendar->getId()
+                        ];
+                    }))
+            ;
     }
 
     public function configureFields(string $pageName): iterable

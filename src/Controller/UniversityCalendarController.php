@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Controller\Admin\UniversityCalendarCrudController;
 use App\Entity\NoRotationPeriod;
 use App\Entity\PublicHoliday;
 use App\Entity\UniversityCalendar;
 use App\Form\UniversityCalendarType;
 use App\Repository\UniversityCalendarRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +34,7 @@ class UniversityCalendarController extends AbstractController
     /**
      * @Route(path = "new", name = "new", methods = {"GET", "POST"})
      */
-    public function new(Request $request, UniversityCalendarRepository $universityCalendarRepository): Response
+    public function new(Request $request, UniversityCalendarRepository $universityCalendarRepository, AdminUrlGenerator $adminUrlGenerator): Response
     {
         $universityCalendar = new UniversityCalendar();
         $universityCalendar->addPublicHoliday(new PublicHoliday());
@@ -43,8 +46,14 @@ class UniversityCalendarController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->getClickedButton() === $form->get('save')) {
                 $universityCalendarRepository->add($universityCalendar, true);
+                $this->addFlash('success', 'Calendrier créé avec succès !');
             }
-            return $this->redirectToRoute('university_calendar_index', [], Response::HTTP_SEE_OTHER);
+
+            $url = $adminUrlGenerator->setController(UniversityCalendarCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl();
+
+            return $this->redirect($url, Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('university_calendar/new.html.twig', [
@@ -66,7 +75,7 @@ class UniversityCalendarController extends AbstractController
     /**
      * @Route(path = "{id}/edit", name = "edit", methods = {"GET", "POST"})
      */
-    public function edit(Request $request, UniversityCalendar $universityCalendar, UniversityCalendarRepository $universityCalendarRepository): Response
+    public function edit(Request $request, UniversityCalendar $universityCalendar, UniversityCalendarRepository $universityCalendarRepository, AdminUrlGenerator $adminUrlGenerator): Response
     {
 
         $form = $this->createForm(UniversityCalendarType::class, $universityCalendar);
@@ -75,7 +84,13 @@ class UniversityCalendarController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $universityCalendarRepository->add($universityCalendar, true);
 
-            return $this->redirectToRoute('university_calendar_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Calendrier modifié avec succès !');
+
+            $url = $adminUrlGenerator->setController(UniversityCalendarCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl();
+
+            return $this->redirect($url, Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('university_calendar/edit.html.twig', [
