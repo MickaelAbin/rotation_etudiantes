@@ -8,6 +8,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 
 class UniversityCalendarCrudController extends AbstractCrudController
@@ -37,18 +40,24 @@ class UniversityCalendarCrudController extends AbstractCrudController
     {
         return $actions
             ->update(Crud::PAGE_INDEX, Action::NEW,
-                        fn (Action $action) => $action->linkToRoute('university_calendar_new')
-            );
+                fn (Action $action) => $action->linkToRoute('university_calendar_new'))
+            ->update(Crud::PAGE_INDEX, Action::EDIT,
+                fn (Action $action) => $action->linkToRoute('university_calendar_edit',
+                    function (UniversityCalendar $universityCalendar): array {
+                    return [
+                        'id' => $universityCalendar->getId()
+                    ];
+                }))
+        ;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            AssociationField::new('academicLevel', 'Promotion'),
+            DateField::new('startDate', 'Date de rentrée'),
+            DateField::new('endDate', 'Date de fin'),
         ];
     }
-    */
 }
