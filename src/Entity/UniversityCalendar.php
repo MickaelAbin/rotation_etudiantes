@@ -58,6 +58,11 @@ class UniversityCalendar
         $this->noRotationPeriods = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return 'Calendrier ' . $this->academicLevel->getLabel();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
