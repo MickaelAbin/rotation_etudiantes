@@ -24,7 +24,9 @@ services:
     # please note that last definitions always *replace* previous ones
 
     App\Service\GuardScheduler:
-        arguments:
+        arguments :
+            $entityManager: '@doctrine.orm.entity_manager'
             $publicHolidayRepository: '@App\Repository\PublicHolidayRepository'
             $noRotationPeriodRepository: '@App\Repository\NoRotationPeriodRepository'
             $studentRepository: '@App\Repository\StudentRepository'
+            $clinicalRotationCategoriesRepository: '@App\Repository\ClinicalRotationCategoriesRepository'

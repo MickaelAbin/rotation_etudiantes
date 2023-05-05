@@ -5,11 +5,14 @@
 {% endblock %}
 
 {% block main %}
+    dump($availableDays)
+    <h2>Available Days:</h2>
+    <ul>
+        {% for day in availableDays %}
+            <li>{{ day|date('Y-m-d') }}</li>
+        {% endfor %}
+    </ul>
 
-    <h1>Liste d'utilisateurs mélangée par academic level</h1>
 
-    {% for user in users %}
-        <p>{{ user.firstName }} {{ user.lastName }} ({{ user.email }})</p>
-    {% endfor %}
 {% endblock %}
 
