@@ -4,9 +4,12 @@ namespace App\Controller;
 
 
 use App\Entity\AcademicLevel;
+use App\Entity\Enrolment;
 use App\Entity\UniversityCalendar;
 use App\Repository\EnrolmentRepository;
 use App\Service\GuardScheduler;
+use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,25 +80,67 @@ class HomeController extends AbstractController
 //    {
 //        $connection = $this->managerRegistry->getConnection('mdl_user');
 //    }
-    /**
-     * @Route(path = "/test", name = "test")
-     */
-    public function test(GuardScheduler $guardScheduler)
-    {
-        $universityCalendar = $this->getDoctrine()->getRepository(UniversityCalendar::class)->find(1);
-        $availableDays = $guardScheduler->createAvailableDaysArray($universityCalendar);
 
-        return $this->render('test.html.twig',['availableDays'=> $availableDays]);
-    }
+//    /**
+//     * @Route(path = "/test/{academicLevel}", name = "test")
+//     */
+//    public function test(GuardScheduler $guardScheduler, int $academicLevel)
+//    {
+//        $availableDays = $guardScheduler->createAvailableDaysArray($academicLevel);
+//        $students = $guardScheduler->shuffleUsersByAcademicLevel($academicLevel);
+//        $clinicalRotationCategories = $guardScheduler->categorybyid($academicLevel);
+//        return $this->render('test.html.twig', ['availableDays' => $availableDays,'students' => $students,'clinicalRotationCategories'=>$clinicalRotationCategories]);
+//    }
     /**
-     * @Route("/users/{academicLevelId}/shuffle", name="user_shuffle")
+     * @Route(path = "/test/{academicLevel}", name = "test")
      */
-    public function test2(GuardScheduler $guardScheduler, int $academicLevelId): Response
+    public function test(GuardScheduler $guardScheduler, EntityManagerInterface $entityManager, int $academicLevel)
     {
-        $users = $guardScheduler->shuffleUsersByAcademicLevel($academicLevelId);
+        $availableDays = $guardScheduler->createAvailableDaysArray($academicLevel);
+        $students = $guardScheduler->shuffleUsersByAcademicLevel($academicLevel);
+        $clinicalRotationCategories = $guardScheduler->categorybyid($academicLevel);
+        $lastStudentIndex = 0;
+        $nbStudents = count($students);
 
-        return $this->render('test2.html.twig', [
-            'users' => $users,
+        foreach ($availableDays as $day) {
+            $dayIsOnWeekend = $day->format('N') > 5;
+            foreach ($clinicalRotationCategories as $category) {
+                $categoryStudentsCount = $category->getNbStudents();
+
+                // Vérification du jour week-end  et du nombre d'étudiants restants dans la liste
+                $categoryIsOnWeekend = $category->isIsOnWeekend();
+                if ($categoryIsOnWeekend === $dayIsOnWeekend) {
+
+
+                    // création de l'enrolment
+                    for ($i = 0; $i < $categoryStudentsCount; $i++) {
+                        $studentIndex = $lastStudentIndex + $i;
+                        if ($studentIndex >= $nbStudents) {
+                            $studentIndex -= $nbStudents;
+                        }
+                        $enrolment = new Enrolment();
+                        $enrolment->setDate(DateTimeImmutable::createFromMutable($day));
+                        $enrolment->setClinicalRotationCategory($category);
+                        $enrolment->setStudent($students[$studentIndex]);
+                        $entityManager->persist($enrolment);
+                    }
+
+                    $lastStudentIndex += $categoryStudentsCount;
+                    //retour au debut du tableau d'etudiant quand plus d'etudiant dans le tableau
+                    if ($lastStudentIndex >= $nbStudents) {
+                        $lastStudentIndex = 0;
+                    }
+                }
+            }
+        }
+
+        $entityManager->flush();
+
+        return $this->render('test.html.twig', [
+            'message' => 'Enrolments created successfully',
+            'availableDays' => $availableDays,
+            'students' => $students,
+            'clinicalRotationCategories' => $clinicalRotationCategories
         ]);
     }
 }

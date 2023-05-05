@@ -64,7 +64,7 @@ class StudentRepository extends ServiceEntityRepository
             ->innerJoin(Enrolment::class,'enrolment', Join::WITH, 'student.moodleUserID = enrolment.student')
             ->innerJoin(ClinicalRotationCategory::class,'category', Join::WITH, 'enrolment.clinicalRotationCategory = category.id')
             ->where('student.academicLevel = :academic_level_id')
-            ->setParameter('academic_level_id', 4)
+            ->setParameter('academic_level_id', 3)
             ->orderBy('student.lastName', 'ASC')
             ->getQuery()
             ->getResult();

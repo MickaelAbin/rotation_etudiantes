@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Service;
-use App\Entity\User;
+use App\Entity\Student;
+use App\Entity\UniversityCalendar;
 use App\Repository\PublicHolidayRepository;
+use App\Repository\ClinicalRotationCategoriesRepository;
 use App\Repository\NoRotationPeriodRepository;
 use App\Repository\StudentRepository;
-use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class GuardScheduler
 {
@@ -13,14 +15,20 @@ class GuardScheduler
 
 
 
-    public function __construct(PublicHolidayRepository $publicHolidayRepository, NoRotationPeriodRepository $noRotationPeriodRepository, StudentRepository $studentRepository)
+    public function __construct(EntityManagerInterface $entityManager,
+                                PublicHolidayRepository $publicHolidayRepository,
+                                NoRotationPeriodRepository $noRotationPeriodRepository,
+                                StudentRepository $studentRepository,
+                                ClinicalRotationCategoriesRepository  $clinicalRotationCategoriesRepository)
     {
+        $this->entityManager = $entityManager;
         $this->PublicHolidayRepository = $publicHolidayRepository;
         $this->NoRotationPeriodRepository = $noRotationPeriodRepository;
         $this->StudentRepository = $studentRepository;
+        $this->ClinicalRotationCategoriesRepository = $clinicalRotationCategoriesRepository;
     }
 
-    public function createAvailableDaysArray($universityCalendar)
+    public function createAvailableDaysArray($academicLevel)
     {
 //        // Récupération de la liste des jours fériés
 //        $holidays = $this->PublicHolidayRepository->findAll();
@@ -28,6 +36,9 @@ class GuardScheduler
 //        foreach ($holidays as $holiday) {
 //            $holidaysDates[] = $holiday->getDate();
 //        }
+
+        // Récupération de la plage de dates correspondant à l'academic level spécifié
+        $universityCalendar = $this->entityManager->getRepository(UniversityCalendar::class)->findOneBy(['academicLevel' => $academicLevel]);
 
         // Récupération des périodes sans garde
         $noRotationPeriodRepository = $this->NoRotationPeriodRepository->findAll();
@@ -57,12 +68,30 @@ class GuardScheduler
     public function shuffleUsersByAcademicLevel(int $academicLevelId): array
     {
         // Récupération des utilisateurs de l'academic level spécifié
-        $studentRepository = $this->StudentRepository->getRepository(User::class);
-        $students = $studentRepository->findBy(['academicLevel' => $academicLevelId]);
+        $students = $this->StudentRepository->createQueryBuilder('s')
+            ->where('s.academicLevel = :academicLevel')
+            ->setParameter('academicLevel', $academicLevelId)
+            ->getQuery()
+            ->getResult();
 
         // Mélange de la liste d'utilisateurs
         shuffle($students);
 
         return $students;
+    }
+
+    public function categorybyid(int $academicLevelId): array
+    {
+        // Récupération des categories de l'academic level spécifié
+        $clinicalRotationCategories = $this->ClinicalRotationCategoriesRepository->createQueryBuilder('c')
+            ->where('c.academicLevel = :academicLevel')
+            ->setParameter('academicLevel', $academicLevelId)
+            ->getQuery()
+            ->getResult();
+
+        // Mélange de la liste d'utilisateurs
+        shuffle($clinicalRotationCategories);
+
+        return $clinicalRotationCategories;
     }
 }
