@@ -21,39 +21,47 @@ class ClinicalRotationCategoryType extends AbstractType
     {
         $builder
             ->add('label', TextType::class,[
-                'label' => 'Libellé :'
+                'label' => 'Libellé'
             ])
+
             ->add('startTime', TimeType::class,[
                 'input' => 'datetime_immutable',
-                'label' => 'Heure de début :'
+                'label' => 'Heure de début'
             ])
+
             ->add('endTime', TimeType::class,[
                 'input' => 'datetime_immutable',
-                'label' => 'Heure de fin :'
+                'label' => 'Heure de fin'
             ])
+
             ->add('nbStudents', IntegerType::class,[
-                'label' => "Nombre détudiant(s) : "
+                'label' => 'Étudiant(s) par créneau'
             ])
+
             ->add('isOnWeekend', ChoiceType::class,[
-                'label' => 'Semaine ou Weekend',
+                'label' => 'Garde de semaine ou de weekend',
                 'placeholder' => 'Sélectionnez une option',
                 'choices'=>[
                     'Week-end'=> true,
                     'Semaine' => false,
-                    ],
+                ],
             ])
 
             ->add('academicLevel',EntityType::class,[
                 'class'=>AcademicLevel::class,
                 'choice_label'=>'label',
-                'label'=>'Promotion : ',
+                'label'=>'Promotion',
             ])
 
             ->add('color',ColorType::class,[
-                'label'=>'Couleur : ',
+                'label'=>'Couleur',
             ])
+
             ->add('save',SubmitType::class,[
                 'label'=>'Enregistrer',
+                'attr' => [
+                    'class' => 'btn p-3 btn-primary rounded'
+                ]
             ])
         ;
     }

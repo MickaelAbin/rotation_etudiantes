@@ -1,4 +1,0 @@
-<form method="post" action="{{ path('clinical-rotation-category_delete', {'id': clinical_rotation_category.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette catégorie de garde ?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ clinical_rotation_category.id) }}">
-    <button class="btn py-2 px3 btn-danger rounded">Supprimer</button>
-</form>

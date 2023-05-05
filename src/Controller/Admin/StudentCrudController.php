@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 
@@ -40,6 +41,7 @@ class StudentCrudController extends AbstractCrudController
     {
         return $filters
             ->add(EntityFilter::new('academicLevel', 'Promotion'))
+            ->add(BooleanFilter::new('isOnRotationSchedule', 'De planning de garde'))
             ;
     }
 
@@ -50,8 +52,8 @@ class StudentCrudController extends AbstractCrudController
             TextField::new('lastName', 'Nom'),
             TextField::new('firstName', 'Prénom'),
             AssociationField::new('academicLevel', 'Promotion'),
-            BooleanField::new('isOnRotationSchedule', 'De planning de garde'),
             TextField::new('email', 'Email'),
+            BooleanField::new('isOnRotationSchedule', 'De planning de garde'),
             ArrayField::new('roles', 'Rôles')->hideWhenCreating()
             // TODO set permissions
             //->setPermission('ROLE_SUPER_ADMIN'),

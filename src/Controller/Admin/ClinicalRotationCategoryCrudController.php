@@ -49,12 +49,12 @@ class ClinicalRotationCategoryCrudController extends AbstractCrudController
     {
         return $actions
             ->update(Crud::PAGE_INDEX, Action::NEW,
-                fn (Action $action) => $action->linkToRoute('university_calendar_new'))
+                fn (Action $action) => $action->linkToRoute('clinical_rotation_category_new'))
             ->update(Crud::PAGE_INDEX, Action::EDIT,
-                fn (Action $action) => $action->linkToRoute('university_calendar_edit',
-                    function (UniversityCalendar $universityCalendar): array {
+                fn (Action $action) => $action->linkToRoute('clinical_rotation_category_edit',
+                    function (ClinicalRotationCategory $clinicalRotationCategory): array {
                         return [
-                            'id' => $universityCalendar->getId()
+                            'id' => $clinicalRotationCategory->getId()
                         ];
                     }))
             ;
@@ -64,7 +64,7 @@ class ClinicalRotationCategoryCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id', 'ID')->hideOnForm()->setPermission('ROLE_SUPER_ADMIN'),
-            TextField::new('label', 'Nom'),
+            TextField::new('label', 'Libellé'),
             AssociationField::new('academicLevel', 'Promotion'),
             TimeField::new('startTime', 'Heure de début'),
             TimeField::new('endTime', 'Heure de fin'),

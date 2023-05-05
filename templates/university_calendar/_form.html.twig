@@ -30,8 +30,8 @@
             </div>
             <div class="row gx-1 justify-content-end px-1">
                 <div class="col-1">
-                    <button type="button" class="add_item_link btn btn-primary rounded" data-collection-holder-class="publicHolidays">
-                        <i class="fa-lg fa-solid fa-plus" title="Ajouter"></i>
+                    <button type="button" class="add_item_link btn btn-primary rounded p-1" data-collection-holder-class="publicHolidays">
+                        <i class="fa-2x fas fa-plus" title="Ajouter"></i>
                     </button>
                 </div>
             </div>
@@ -52,19 +52,21 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="row gx-1 justify-content-end px-1">
-                <div class="col-1">
-                    <button type="button" class="add_item_link btn btn-primary rounded" data-collection-holder-class="noRotationPeriods">
-                        <i class="fa-lg fa-solid fa-plus" title="Ajouter"></i>
+            <div class="row gx-2 justify-content-end px-1">
+                <div class="col-1 gx-1">
+                    <button type="button" class="add_item_link btn btn-primary rounded p-1" data-collection-holder-class="noRotationPeriods">
+                        <i class="fa-2x fas fa-plus" title="Ajouter"></i>
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" id="button-row">
         <div class="col-4 row justify-content-center">
-            <div class="col-lg-5 col-sm-12"><a href="{{ path('university_calendar_index') }}" class="btn py-2 px3 btn-primary rounded">Annuler</a></div>
-            <div class="col-lg-5 col-sm-12"> {{ form_row(form.save) }}</div>
+            <div class="col-lg-5 col-sm-12">
+                <a href="{{ ea_url().setController('App\\Controller\\Admin\\UniversityCalendarCrudController').setAction('index') }}" class="btn p-3 btn-primary rounded">Annuler</a>
+            </div>
+            <div class="col-lg-5 col-sm-12 align-items-center"> {{ form_row(form.save) }}</div>
         </div>
     </div>
     {{ form_end(form) }}

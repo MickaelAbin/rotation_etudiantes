@@ -2,33 +2,26 @@
 
 namespace App\Controller;
 
+use App\Controller\Admin\ClinicalRotationCategoryCrudController;
 use App\Entity\ClinicalRotationCategory;
 use App\Form\ClinicalRotationCategoryType;
 use App\Repository\ClinicalRotationCategoriesRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/clinical-rotation-category/", name = "clinical-rotation-category_" )
+ * @Route(path = "/admin/clinical-rotation-category/", name = "clinical_rotation_category_" )
  */
 class ClinicalRotationCategoryController extends AbstractController
 {
     /**
-     * @Route("", name="index", methods={"GET"})
+     * @Route(path = "new", name = "new", methods = {"GET", "POST"})
      */
-    public function index(ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository): Response
-    {
-        return $this->render('clinical_rotation_category/index.html.twig', [
-            'clinical_rotation_categories' => $clinicalRotationCategoriesRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("new", name="new", methods={"GET", "POST"})
-     */
-    public function new(Request $request, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository): Response
+    public function new(Request $request, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository, AdminUrlGenerator $adminUrlGenerator): Response
     {
         $clinicalRotationCategory = new ClinicalRotationCategory();
         $form = $this->createForm(ClinicalRotationCategoryType::class, $clinicalRotationCategory);
@@ -36,8 +29,13 @@ class ClinicalRotationCategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $clinicalRotationCategoriesRepository->add($clinicalRotationCategory, true);
+            $this->addFlash('success', 'Catégorie de garde créée avec succès !');
 
-            return $this->redirectToRoute('clinical-rotation-category_index', [], Response::HTTP_SEE_OTHER);
+            $url = $adminUrlGenerator->setController(ClinicalRotationCategoryCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl();
+
+            return $this->redirect($url, Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('clinical_rotation_category/new.html.twig', [
@@ -47,44 +45,28 @@ class ClinicalRotationCategoryController extends AbstractController
     }
 
     /**
-     * @Route("{id}", name="show", methods={"GET"})
+     * @Route(path = "{id}/edit", name = "edit", methods = {"GET", "POST"})
      */
-    public function show(ClinicalRotationCategory $clinicalRotationCategory): Response
-    {
-        return $this->render('clinical_rotation_category/show.html.twig', [
-            'clinical_rotation_category' => $clinicalRotationCategory,
-        ]);
-    }
-
-    /**
-     * @Route("{id}/edit", name="edit", methods={"GET", "POST"})
-     */
-    public function edit(Request $request, ClinicalRotationCategory $clinicalRotationCategory, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository): Response
+    public function edit(Request $request, ClinicalRotationCategory $clinicalRotationCategory,
+                         ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository, AdminUrlGenerator $adminUrlGenerator): Response
     {
         $form = $this->createForm(ClinicalRotationCategoryType::class, $clinicalRotationCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $clinicalRotationCategoriesRepository->add($clinicalRotationCategory, true);
+            $this->addFlash('success', 'Catégorie de garde modifiée avec succès !');
 
-            return $this->redirectToRoute('clinical-rotation-category_index', [], Response::HTTP_SEE_OTHER);
+            $url = $adminUrlGenerator->setController(ClinicalRotationCategoryCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl();
+
+            return $this->redirect($url, Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('clinical_rotation_category/edit.html.twig', [
             'clinical_rotation_category' => $clinicalRotationCategory,
             'form' => $form,
         ]);
-    }
-
-    /**
-     * @Route("{id}/delete", name="delete", methods={"POST"})
-     */
-    public function delete(Request $request, ClinicalRotationCategory $clinicalRotationCategory, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$clinicalRotationCategory->getId(), $request->request->get('_token'))) {
-            $clinicalRotationCategoriesRepository->remove($clinicalRotationCategory, true);
-        }
-
-        return $this->redirectToRoute('clinical-rotation-category_index', [], Response::HTTP_SEE_OTHER);
     }
 }
