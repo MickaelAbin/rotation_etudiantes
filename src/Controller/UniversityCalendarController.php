@@ -21,20 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class UniversityCalendarController extends AbstractController
 {
     /**
-     * @Route(path = "", name = "index", methods = {"GET"})
-     */
-    public function index(UniversityCalendarRepository $universityCalendarRepository): Response
-    {
-        dump($universityCalendarRepository->findAll());
-        return $this->render('university_calendar/index.html.twig', [
-            'university_calendars' => $universityCalendarRepository->findAll(),
-        ]);
-    }
-
-    /**
      * @Route(path = "new", name = "new", methods = {"GET", "POST"})
      */
-    public function new(Request $request, UniversityCalendarRepository $universityCalendarRepository, AdminUrlGenerator $adminUrlGenerator): Response
+    public function new(Request $request, UniversityCalendarRepository $universityCalendarRepository,
+                        AdminUrlGenerator $adminUrlGenerator): Response
     {
         $universityCalendar = new UniversityCalendar();
         $universityCalendar->addPublicHoliday(new PublicHoliday());
@@ -57,27 +47,17 @@ class UniversityCalendarController extends AbstractController
         }
 
         return $this->renderForm('university_calendar/new.html.twig', [
-            //'university_calendar' => $universityCalendar,
-            'form' => $form,
-        ]);
-    }
-
-    /**
-     * @Route(path = "{id}", name = "show", methods = {"GET"})
-     */
-    public function show(UniversityCalendar $universityCalendar): Response
-    {
-        return $this->render('university_calendar/show.html.twig', [
             'university_calendar' => $universityCalendar,
+            'form' => $form,
         ]);
     }
 
     /**
      * @Route(path = "{id}/edit", name = "edit", methods = {"GET", "POST"})
      */
-    public function edit(Request $request, UniversityCalendar $universityCalendar, UniversityCalendarRepository $universityCalendarRepository, AdminUrlGenerator $adminUrlGenerator): Response
+    public function edit(Request $request, UniversityCalendar $universityCalendar,
+                         UniversityCalendarRepository $universityCalendarRepository, AdminUrlGenerator $adminUrlGenerator): Response
     {
-
         $form = $this->createForm(UniversityCalendarType::class, $universityCalendar);
         $form->handleRequest($request);
 
@@ -97,17 +77,5 @@ class UniversityCalendarController extends AbstractController
             'university_calendar' => $universityCalendar,
             'form' => $form,
         ]);
-    }
-
-    /**
-     * @Route(path = " /{id}", name="app_university_calendar_delete", methods={"POST"})
-     */
-    public function delete(Request $request, UniversityCalendar $universityCalendar, UniversityCalendarRepository $universityCalendarRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$universityCalendar->getId(), $request->request->get('_token'))) {
-            $universityCalendarRepository->remove($universityCalendar, true);
-        }
-
-        return $this->redirectToRoute('university_calendar_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -1,7 +1,7 @@
 const addTagFormDeleteLink = (item) => {
 
     const faIcon = document.createElement('i')
-    faIcon.classList.add('fa-lg', 'fa-solid', 'fa-xmark')
+    faIcon.classList.add('fa-2x', 'fas', 'fa-times')
     faIcon.setAttribute('title', 'Supprimer')
 
     const removeFormButton = document.createElement('button')
