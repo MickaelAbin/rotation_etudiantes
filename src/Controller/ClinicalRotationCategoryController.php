@@ -7,8 +7,11 @@ use App\Entity\ClinicalRotationCategory;
 use App\Form\ClinicalRotationCategoryType;
 use App\Repository\ClinicalRotationCategoriesRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +24,8 @@ class ClinicalRotationCategoryController extends AbstractController
     /**
      * @Route(path = "new", name = "new", methods = {"GET", "POST"})
      */
-    public function new(Request $request, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository, AdminUrlGenerator $adminUrlGenerator): Response
+    public function new(Request $request, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository,
+                        AdminUrlGenerator $adminUrlGenerator, EventDispatcherInterface $dispatcher): Response
     {
         $clinicalRotationCategory = new ClinicalRotationCategory();
         $form = $this->createForm(ClinicalRotationCategoryType::class, $clinicalRotationCategory);
@@ -29,7 +33,8 @@ class ClinicalRotationCategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $clinicalRotationCategoriesRepository->add($clinicalRotationCategory, true);
-            $this->addFlash('success', 'Catégorie de garde créée avec succès !');
+
+            $dispatcher->dispatch(new AfterEntityPersistedEvent($clinicalRotationCategory));
 
             $url = $adminUrlGenerator->setController(ClinicalRotationCategoryCrudController::class)
                 ->setAction(Action::INDEX)
@@ -47,15 +52,16 @@ class ClinicalRotationCategoryController extends AbstractController
     /**
      * @Route(path = "{id}/edit", name = "edit", methods = {"GET", "POST"})
      */
-    public function edit(Request $request, ClinicalRotationCategory $clinicalRotationCategory,
-                         ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository, AdminUrlGenerator $adminUrlGenerator): Response
+    public function edit(Request $request, ClinicalRotationCategory $clinicalRotationCategory, ClinicalRotationCategoriesRepository $clinicalRotationCategoriesRepository,
+                         AdminUrlGenerator $adminUrlGenerator, EventDispatcherInterface $dispatcher): Response
     {
         $form = $this->createForm(ClinicalRotationCategoryType::class, $clinicalRotationCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $clinicalRotationCategoriesRepository->add($clinicalRotationCategory, true);
-            $this->addFlash('success', 'Catégorie de garde modifiée avec succès !');
+
+            $dispatcher->dispatch(new AfterEntityUpdatedEvent($clinicalRotationCategory));
 
             $url = $adminUrlGenerator->setController(ClinicalRotationCategoryCrudController::class)
                 ->setAction(Action::INDEX)

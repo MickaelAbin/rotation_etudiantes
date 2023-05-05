@@ -9,8 +9,11 @@ use App\Entity\UniversityCalendar;
 use App\Form\UniversityCalendarType;
 use App\Repository\UniversityCalendarRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +27,7 @@ class UniversityCalendarController extends AbstractController
      * @Route(path = "new", name = "new", methods = {"GET", "POST"})
      */
     public function new(Request $request, UniversityCalendarRepository $universityCalendarRepository,
-                        AdminUrlGenerator $adminUrlGenerator): Response
+                        AdminUrlGenerator $adminUrlGenerator, EventDispatcherInterface $dispatcher): Response
     {
         $universityCalendar = new UniversityCalendar();
         $universityCalendar->addPublicHoliday(new PublicHoliday());
@@ -36,7 +39,9 @@ class UniversityCalendarController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->getClickedButton() === $form->get('save')) {
                 $universityCalendarRepository->add($universityCalendar, true);
-                $this->addFlash('success', 'Calendrier créé avec succès !');
+
+                // Dispatch d'un event EasyAdmin, afin d'automatiser les messages flash (via le Listener EasyAdminListener)
+                $dispatcher->dispatch(new AfterEntityPersistedEvent($universityCalendar));
             }
 
             $url = $adminUrlGenerator->setController(UniversityCalendarCrudController::class)
@@ -55,16 +60,15 @@ class UniversityCalendarController extends AbstractController
     /**
      * @Route(path = "{id}/edit", name = "edit", methods = {"GET", "POST"})
      */
-    public function edit(Request $request, UniversityCalendar $universityCalendar,
-                         UniversityCalendarRepository $universityCalendarRepository, AdminUrlGenerator $adminUrlGenerator): Response
+    public function edit(Request $request, UniversityCalendar $universityCalendar, UniversityCalendarRepository $universityCalendarRepository,
+                         AdminUrlGenerator $adminUrlGenerator, EventDispatcherInterface $dispatcher): Response
     {
         $form = $this->createForm(UniversityCalendarType::class, $universityCalendar);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $universityCalendarRepository->add($universityCalendar, true);
-
-            $this->addFlash('success', 'Calendrier modifié avec succès !');
+            $dispatcher->dispatch(new AfterEntityUpdatedEvent($universityCalendar));
 
             $url = $adminUrlGenerator->setController(UniversityCalendarCrudController::class)
                 ->setAction(Action::INDEX)

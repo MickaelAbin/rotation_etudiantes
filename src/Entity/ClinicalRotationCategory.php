@@ -77,6 +77,10 @@ class ClinicalRotationCategory
      */
     private ?AcademicLevel $academicLevel = null;
 
+    public function __toString()
+    {
+        return 'catégorie de garde ' . $this->label;
+    }
 
     public function getId(): ?int
     {

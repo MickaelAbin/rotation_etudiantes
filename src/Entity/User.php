@@ -44,7 +44,7 @@ abstract class User implements UserInterface
 
     public function __toString()
     {
-        return ucfirst($this->firstName) . strtoupper($this->lastName);
+        return ucfirst($this->firstName) . ' ' . strtoupper($this->lastName);
     }
 
     public function getMoodleUserId(): ?int
