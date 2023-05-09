@@ -30,7 +30,7 @@ class AcademicLevelCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id', 'ID')->hideOnForm(),
-            TextField::new('label', 'Nom'),
+            TextField::new('label', 'Libellé'),
         ];
     }
 

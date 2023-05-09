@@ -26,12 +26,12 @@ class UniversityCalendarType extends AbstractType
             ->add('startDate',DateType::class,[
                 'input' => 'datetime_immutable',
                 'widget' => 'single_text',
-                'label'=> 'Date de début',
+                'label'=> 'Rentrée',
             ])
             ->add('endDate',DateType::class,[
                 'input' => 'datetime_immutable',
                 'widget' => 'single_text',
-                'label'=> 'Date de fin',
+                'label'=> 'Fin d\'année',
             ])
             ->add('publicHolidays', CollectionType::class,[
                 'label' => 'Jours fériés avec garde',
@@ -58,7 +58,13 @@ class UniversityCalendarType extends AbstractType
 
             ->add('save',SubmitType::class,[
                 'label'=>'Enregistrer',
-                ])
+                'row_attr' => [
+                    'class' => ' '
+                ],
+                'attr' => [
+                    'class' => 'btn p-3 btn-primary rounded'
+                ]
+            ])
         ;
     }
 

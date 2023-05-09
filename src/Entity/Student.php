@@ -43,6 +43,11 @@ class Student extends User
         $this->enrolments = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return 'Étudiant ' . parent::__toString();
+    }
+
     /**
      * @see UserInterface
      */

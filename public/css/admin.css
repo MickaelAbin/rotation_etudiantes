@@ -26,4 +26,7 @@
     --button-active-color: #769FCD;
 }
 
+#flash-messages div {
+    text-align: center;
+}
 

@@ -1,7 +1,4 @@
 
-
-
-
 window.onload = () => {
     let calendarElt = document.querySelector("#calendrier");
     let data = JSON.parse(calendarElt.getAttribute('data-events'));
