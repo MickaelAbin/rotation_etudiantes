@@ -28,6 +28,7 @@ class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig');
     }
+    
     /**
      * @Route(path = "/calendrier", name = "calendrier")
      */
