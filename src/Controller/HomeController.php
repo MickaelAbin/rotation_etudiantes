@@ -3,32 +3,39 @@
 namespace App\Controller;
 
 
-use App\Entity\AcademicLevel;
 use App\Entity\Enrolment;
-use App\Entity\UniversityCalendar;
 use App\Repository\EnrolmentRepository;
+use App\Repository\UserRepository;
 use App\Service\GuardScheduler;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 
 class HomeController extends AbstractController
 {
-//    private ManagerRegistry $managerRegistry;
-//    public function __construct(ManagerRegistry $managerRegistry) {
-//        $this->managerRegistry = $managerRegistry;
-//    }
     /**
      * @Route(path = "/", name = "home")
      */
-    public function home()
+    public function home(Request $request, UserAuthenticatorInterface $userAuthenticator, AuthenticatorInterface $authenticator,
+                         UserRepository $userRepository): Response
     {
+//        $id = 12346;
+//
+//        // check si l'utilisateur est en DB, et l'authentifie
+//        $user = $userRepository->findByID($id);
+//        if($user !== null) {
+//            $request->request->set('moodleUserID', $id);
+//            return $userAuthenticator->authenticateUser($user, $authenticator, $request);
+//        }
+
         return $this->render('home/index.html.twig');
     }
-    
+
     /**
      * @Route(path = "/calendrier", name = "calendrier")
      */
