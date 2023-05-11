@@ -7,7 +7,9 @@ use App\Entity\AcademicLevel;
 use App\Entity\Enrolment;
 use App\Entity\UniversityCalendar;
 use App\Repository\EnrolmentRepository;
+use App\Repository\StudentRepository;
 use App\Service\GuardScheduler;
+use DateInterval;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -30,11 +32,11 @@ class HomeController extends AbstractController
     }
     
     /**
-     * @Route(path = "/calendrier", name = "calendrier")
+     * @Route(path = "/calendrier/{id}", name = "calendrier",methods = {"GET"})
      */
-    public function calendrier(EnrolmentRepository $enrolmentRepository)
+    public function calendrier(EnrolmentRepository $enrolmentRepository, AcademicLevel $academicLevel = null): Response
     {
-        $events = $enrolmentRepository->findAll();
+        $events = $enrolmentRepository->listByAcademicLevelCalendrier($academicLevel->getId());
         $creneaux=[];
         foreach ($events as $event){
             $creneaux[]=[
@@ -48,7 +50,7 @@ class HomeController extends AbstractController
             ];
         }
         $data = json_encode($creneaux);
-        return $this->render('home/calendrier.html.twig', compact('data'));
+        return $this->render('home/calendrier.html.twig', compact('data','academicLevel'));
     }
 
 
@@ -100,36 +102,51 @@ class HomeController extends AbstractController
         $availableDays = $guardScheduler->createAvailableDaysArray($academicLevel);
         $students = $guardScheduler->shuffleUsersByAcademicLevel($academicLevel);
         $clinicalRotationCategories = $guardScheduler->categorybyid($academicLevel);
+        $holidaysDates = $guardScheduler->createAvailableDaysHolidaysArray($academicLevel);
         $lastStudentIndex = 0;
         $nbStudents = count($students);
 
         foreach ($availableDays as $day) {
-            $dayIsOnWeekend = $day->format('N') > 5;
-            foreach ($clinicalRotationCategories as $category) {
-                $categoryStudentsCount = $category->getNbStudents();
+            $isWeekend = $day->format('N') >= 6; // Le samedi (6) et dimanche (7) sont considérés comme des week-ends
 
-                // Vérification du jour week-end  et du nombre d'étudiants restants dans la liste
-                $categoryIsOnWeekend = $category->isIsOnWeekend();
-                if ($categoryIsOnWeekend === $dayIsOnWeekend) {
+            if (in_array($day, $holidaysDates)) { // Si le jour est un jour férié, on le remplit avec des créneaux du week-end
+                $isWeekend = true;
+            }
 
+            if ($isWeekend) { // création des enrolments pour les week-ends et les jours fériés
+                foreach ($clinicalRotationCategories as $category) {
+                    if ($category->isIsOnWeekend()) {
+                        $categoryStudentsCount = $category->getNbStudents();
+                        $studentIndex = ($lastStudentIndex % $nbStudents);
 
-                    // création de l'enrolment
-                    for ($i = 0; $i < $categoryStudentsCount; $i++) {
-                        $studentIndex = $lastStudentIndex + $i;
-                        if ($studentIndex >= $nbStudents) {
-                            $studentIndex -= $nbStudents;
+                        for ($i = 0; $i < $categoryStudentsCount; $i++) {
+                            $enrolment = new Enrolment();
+                            $enrolment->setDate(DateTimeImmutable::createFromMutable($day));
+                            $enrolment->setClinicalRotationCategory($category);
+                            $enrolment->setStudent($students[$studentIndex]);
+                            $entityManager->persist($enrolment);
+
+                            $lastStudentIndex++;
+                            $studentIndex = ($lastStudentIndex % $nbStudents);
                         }
-                        $enrolment = new Enrolment();
-                        $enrolment->setDate(DateTimeImmutable::createFromMutable($day));
-                        $enrolment->setClinicalRotationCategory($category);
-                        $enrolment->setStudent($students[$studentIndex]);
-                        $entityManager->persist($enrolment);
                     }
+                }
+            } else { // création des enrolments pour les jours de semaine
+                foreach ($clinicalRotationCategories as $category) {
+                    if (!$category->isIsOnWeekend()) {
+                        $categoryStudentsCount = $category->getNbStudents();
+                        $studentIndex = ($lastStudentIndex % $nbStudents);
 
-                    $lastStudentIndex += $categoryStudentsCount;
-                    //retour au debut du tableau d'etudiant quand plus d'etudiant dans le tableau
-                    if ($lastStudentIndex >= $nbStudents) {
-                        $lastStudentIndex = 0;
+                        for ($i = 0; $i < $categoryStudentsCount; $i++) {
+                            $enrolment = new Enrolment();
+                            $enrolment->setDate(DateTimeImmutable::createFromMutable($day));
+                            $enrolment->setClinicalRotationCategory($category);
+                            $enrolment->setStudent($students[$studentIndex]);
+                            $entityManager->persist($enrolment);
+
+                            $lastStudentIndex++;
+                            $studentIndex = ($lastStudentIndex % $nbStudents);
+                        }
                     }
                 }
             }
@@ -144,4 +161,6 @@ class HomeController extends AbstractController
             'clinicalRotationCategories' => $clinicalRotationCategories
         ]);
     }
+
+
 }

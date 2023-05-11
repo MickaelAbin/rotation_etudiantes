@@ -78,4 +78,16 @@ class EnrolmentRepository extends ServiceEntityRepository
             ->getResult();
 
     }
+    public function listByAcademicLevelCalendrier(int $academicLevelID)
+    {
+        return $this->createQueryBuilder('enrolment')
+//            ->select('student', 'enrolment', 'category')
+            ->innerJoin(Student::class,'student', Join::WITH, 'student.moodleUserID = enrolment.student')
+            ->innerJoin(ClinicalRotationCategory::class,'category', Join::WITH, 'enrolment.clinicalRotationCategory = category.id')
+            ->where('student.academicLevel = :academic_level_id')
+            ->setParameter('academic_level_id', $academicLevelID)
+            ->getQuery()
+            ->getResult();
+
+    }
 }

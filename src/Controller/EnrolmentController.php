@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\AcademicLevel;
+use App\Entity\ClinicalRotationCategory;
 use App\Entity\Enrolment;
+use App\Entity\Student;
 use App\Form\EnrolmentType;
 use App\Repository\EnrolmentRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +20,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class EnrolmentController extends AbstractController
 {
     /**
-     * @Route(path = "", name = "index", methods = {"GET"})
+     * @Route(path = "{id}", name = "index", methods = {"GET"})
      */
-    public function index(EnrolmentRepository $enrolmentRepository): Response
+    public function index(EnrolmentRepository $enrolmentRepository,ClinicalRotationCategory $clinicalRotationCategory,AcademicLevel $academicLevel = null): Response
     {
+
+        $enrolment=$enrolmentRepository->listByAcademicLevelCalendrier($academicLevel->getId());
         return $this->render('enrolment/index.html.twig', [
-            'enrolments' => $enrolmentRepository->findAll(),
+            'enrolments' => $enrolment,
+            'academicLevel' => $academicLevel,
         ]);
     }
     /**
@@ -95,4 +102,6 @@ class EnrolmentController extends AbstractController
 
         return $this->redirectToRoute('enrolment_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 }

@@ -28,20 +28,13 @@ class GuardScheduler
         $this->ClinicalRotationCategoriesRepository = $clinicalRotationCategoriesRepository;
     }
 
-    public function createAvailableDaysArray($academicLevel)
+    public function createAvailableDaysArray(int $academicLevel)
     {
-//        // Récupération de la liste des jours fériés
-//        $holidays = $this->PublicHolidayRepository->findAll();
-//        $holidaysDates = [];
-//        foreach ($holidays as $holiday) {
-//            $holidaysDates[] = $holiday->getDate();
-//        }
-
         // Récupération de la plage de dates correspondant à l'academic level spécifié
         $universityCalendar = $this->entityManager->getRepository(UniversityCalendar::class)->findOneBy(['academicLevel' => $academicLevel]);
 
         // Récupération des périodes sans garde
-        $noRotationPeriodRepository = $this->NoRotationPeriodRepository->findAll();
+        $noRotationPeriods = $universityCalendar->getNoRotationPeriods();
 
         // Création d'un tableau de dates avec tous les jours de la promotion
         $startDate = new \DateTime($universityCalendar->getStartDate()->format('Y-m-d'));
@@ -52,7 +45,7 @@ class GuardScheduler
         foreach ($dateRange as $date) {
             // Vérification que le jour n'est pas une période sans garde
             $isGuardedDay = true;
-            foreach ($noRotationPeriodRepository as $period) {
+            foreach ($noRotationPeriods as $period) {
                 if ($date >= $period->getStartDate() && $date <= $period->getEndDate()) {
                     $isGuardedDay = false;
                     break;
@@ -69,15 +62,33 @@ class GuardScheduler
     {
         // Récupération des utilisateurs de l'academic level spécifié
         $students = $this->StudentRepository->createQueryBuilder('s')
+            ->leftJoin('s.enrolments', 'e')
+            ->addSelect('COUNT(e) AS HIDDEN enrolment_count')
             ->where('s.academicLevel = :academicLevel')
             ->setParameter('academicLevel', $academicLevelId)
+            ->groupBy('s.moodleUserID')
+            ->orderBy('enrolment_count', 'DESC')
             ->getQuery()
             ->getResult();
 
-        // Mélange de la liste d'utilisateurs
-        shuffle($students);
+        // Grouper les étudiants par nombre d'enrolments
+        $groupedStudents = [];
+        foreach ($students as $student) {
+            $enrolmentCount = $student->getEnrolments()->count();
+            if (!isset($groupedStudents[$enrolmentCount])) {
+                $groupedStudents[$enrolmentCount] = [];
+            }
+            $groupedStudents[$enrolmentCount][] = $student;
+        }
 
-        return $students;
+        // Mélanger les groupes d'étudiants et les concaténer
+        $shuffledStudents = [];
+        foreach ($groupedStudents as $group) {
+            shuffle($group);
+            $shuffledStudents = array_merge($shuffledStudents, $group);
+        }
+
+        return $shuffledStudents;
     }
 
     public function categorybyid(int $academicLevelId): array
@@ -89,9 +100,19 @@ class GuardScheduler
             ->getQuery()
             ->getResult();
 
-        // Mélange de la liste d'utilisateurs
-        shuffle($clinicalRotationCategories);
-
         return $clinicalRotationCategories;
+    }
+    public function createAvailableDaysHolidaysArray(int $academicLevel)
+    {
+        $holidays = array();
+        // Récupération de la plage de dates correspondant à l'academic level spécifié
+        $universityCalendar = $this->entityManager->getRepository(UniversityCalendar::class)->findOneBy(['academicLevel' => $academicLevel]);
+
+        // Récupération des périodes sans garde
+        $holidaysDates = $universityCalendar->getPublicHolidays();
+        foreach ($holidaysDates as $publicHoliday) {
+            $holidays[] = $publicHoliday->getDate();
+        }
+        return $holidays;
     }
 }

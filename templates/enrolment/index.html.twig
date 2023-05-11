@@ -4,28 +4,41 @@
 {% block h2 %}Liste des gardes{% endblock %}
 
 {% block main %}
-
+    <div></div>
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 2 ? 'active' }}" href="{{ path('enrolment_index', {'id': 2}) }}">Vet2</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 3 ? 'active' }}" href="{{ path('enrolment_index', {'id': 3}) }}">Vet3</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 4 ? 'active' }}" href="{{ path('enrolment_index', {'id': 4}) }}">Vet4</a>
+        </li>
+    </ul>
+    </div>
+    {% set categories = [] %}
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th>Date</th>
-                <th>Etudiant</th>
-                <th>Categorie de gardes</th>
-
-            </tr>
+        <tr>
+            <th>Date</th>
+            {% for enrolment in enrolments %}
+                {% if enrolment.clinicalRotationCategory.label not in categories %}
+                    <th>{{ enrolment.clinicalRotationCategory.label }}</th>
+                    {% set categories = categories|merge([enrolment.clinicalRotationCategory.label]) %}
+                {% endif %}
+            {% endfor %}
+        </tr>
         </thead>
         <tbody>
         {% for enrolment in enrolments %}
             <tr>
                 <td> {{ enrolment.date ? enrolment.date|date('l j F Y')|replace({'Monday': 'Lundi', 'Tuesday': 'Mardi', 'Wednesday': 'Mercredi', 'Thursday': 'Jeudi', 'Friday': 'Vendredi', 'Saturday': 'Samedi', 'Sunday': 'Dimanche', 'January': 'Janvier', 'February': 'Février', 'March': 'Mars', 'April': 'Avril', 'May': 'Mai', 'June': 'Juin', 'July': 'Juillet', 'August': 'Août', 'September': 'Septembre', 'October': 'Octobre', 'November': 'Novembre', 'December': 'Décembre'}) : '' }}</td>
                 <td>{{ enrolment.student.firstName}}  {{enrolment.student.lastName }}</td>
-                <td style="background-color: {{ enrolment.ClinicalRotationCategory.color }};color: white;">
-                    {{ enrolment.ClinicalRotationCategory.label }}
-                </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">pas de donnée</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -33,3 +46,4 @@
 
     <a href="{{ path('enrolment_new') }}">Create new</a>
 {% endblock %}
+
