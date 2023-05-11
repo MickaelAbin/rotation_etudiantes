@@ -4,7 +4,19 @@
 {% block h2 %}Liste par étudiant{% endblock %}
 
 {% block main %}
-
+    <div></div>
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 2 ? 'active' }}" href="{{ path('student_list', {'id': 2}) }}">Vet2</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 3 ? 'active' }}" href="{{ path('student_list', {'id': 3}) }}">Vet3</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 4 ? 'active' }}" href="{{ path('student_list', {'id': 4}) }}">Vet4</a>
+        </li>
+    </ul>
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -14,20 +26,21 @@
         </tr>
         </thead>
         <tbody>
+
         {% for student in students %}
             <tr>
                 <td>{{ student.lastName }} {{ student.firstName }}</td>
                 <td>{{ student.enrolments | length }}</td>
-                {% for enrolment in student.enrolments %}
-                <td style="background-color: {{ enrolment.ClinicalRotationCategory.color }};color: white;">
-                    {{ enrolment.date ? enrolment.date|date('l j F Y')|replace({'Monday': 'Lundi', 'Tuesday': 'Mardi', 'Wednesday': 'Mercredi', 'Thursday': 'Jeudi', 'Friday': 'Vendredi', 'Saturday': 'Samedi', 'Sunday': 'Dimanche', 'January': 'Janvier', 'February': 'Février', 'March': 'Mars', 'April': 'Avril', 'May': 'Mai', 'June': 'Juin', 'July': 'Juillet', 'August': 'Août', 'September': 'Septembre', 'October': 'Octobre', 'November': 'Novembre', 'December': 'Décembre'}) : '' }}
-                </td>
-                </td>
+                {% set enrolments = student.enrolments|sort((a, b) => a.date <=> b.date) %}
+                {% for enrolment in enrolments %}
+                    <td style="background-color: {{ enrolment.ClinicalRotationCategory.color }};color: white;">
+                        {{ enrolment.date ? enrolment.date|date('l j F Y')|replace({'Monday': 'Lundi', 'Tuesday': 'Mardi', 'Wednesday': 'Mercredi', 'Thursday': 'Jeudi', 'Friday': 'Vendredi', 'Saturday': 'Samedi', 'Sunday': 'Dimanche', 'January': 'Janvier', 'February': 'Février', 'March': 'Mars', 'April': 'Avril', 'May': 'Mai', 'June': 'Juin', 'July': 'Juillet', 'August': 'Août', 'September': 'Septembre', 'October': 'Octobre', 'November': 'Novembre', 'December': 'Décembre'}) : '' }}
+                    </td>
                 {% endfor %}
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">Pas de donnée</td>
             </tr>
         {% endfor %}
         </tbody>

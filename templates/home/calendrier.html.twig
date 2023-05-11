@@ -11,7 +11,19 @@
 {% endblock %}
 
 {% block main %}
-
+    <div></div>
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 2 ? 'active' }}" href="{{ path('calendrier', {'id': 2}) }}">Vet2</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 3 ? 'active' }}" href="{{ path('calendrier', {'id': 3}) }}">Vet3</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 4 ? 'active' }}" href="{{ path('calendrier', {'id': 4}) }}">Vet4</a>
+        </li>
+    </ul>
+    </div>
     <div id="calendrier" data-events="{{ data }}"></div>
 
 

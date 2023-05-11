@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\AcademicLevel;
 use App\Entity\Student;
+use App\Form\FiltreAcademicLevelType;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/student")
+ * @Route(path = "/student")
  */
 class StudentController extends AbstractController
 {
@@ -27,12 +29,16 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/list", name="student_list", methods={"GET"})
+     * @Route(path = "/list/{id}", name = "student_list", methods = {"GET"})
      */
-    public function listByStudent(StudentRepository $studentRepository): Response
+    public function listByStudent( StudentRepository $studentRepository, AcademicLevel $academicLevel = null): Response
     {
+
+        $students = $studentRepository->listByAcademicLevel($academicLevel->getId());
+
         return $this->render('student/studentList.html.twig', [
-            'students' => $studentRepository->listByAcademicLevel(),
+            'students' => $students,
+            'academicLevel' => $academicLevel,
         ]);
     }
 
