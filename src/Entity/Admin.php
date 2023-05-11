@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 class Admin extends User
 {
+    public function __toString()
+    {
+        return 'Administrateur ' . parent::__toString();
+    }
+
     public function getRoles(): array
     {
         $roles = $this->roles;

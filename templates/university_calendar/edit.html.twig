@@ -1,13 +1,14 @@
-{% extends 'base.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
 
-{% block title %}{{ parent() }}{% endblock %}
-
-{% block h2 %}Calendrier Universitaire {{ university_calendar.academicLevel.label }}{% endblock %}
+{% block content_title %}
+    Modifier Calendrier {{ university_calendar.academicLevel.label }}
+{% endblock %}
 
 {% block main %}
     {{ include('university_calendar/_form.html.twig') }}
 {% endblock %}
 
-{% block javascripts %}
+{% block body_javascript %}
+    {{ parent() }}
     <script src="{{ asset('js/university_calendar_new.js') }}"></script>
 {% endblock %}

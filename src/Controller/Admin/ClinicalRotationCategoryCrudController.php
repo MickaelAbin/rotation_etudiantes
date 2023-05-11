@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\ClinicalRotationCategory;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -43,11 +45,26 @@ class ClinicalRotationCategoryCrudController extends AbstractCrudController
         ;
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->update(Crud::PAGE_INDEX, Action::NEW,
+                fn (Action $action) => $action->linkToRoute('clinical_rotation_category_new'))
+            ->update(Crud::PAGE_INDEX, Action::EDIT,
+                fn (Action $action) => $action->linkToRoute('clinical_rotation_category_edit',
+                    function (ClinicalRotationCategory $clinicalRotationCategory): array {
+                        return [
+                            'id' => $clinicalRotationCategory->getId()
+                        ];
+                    }))
+            ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id', 'ID')->hideOnForm()->setPermission('ROLE_SUPER_ADMIN'),
-            TextField::new('label', 'Nom'),
+            TextField::new('label', 'Libellé'),
             AssociationField::new('academicLevel', 'Promotion'),
             TimeField::new('startTime', 'Heure de début'),
             TimeField::new('endTime', 'Heure de fin'),
