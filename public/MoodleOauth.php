@@ -1,4 +1,4 @@
 <?php
 
-    header('Location:/login/?id=12346');
+    header('Location:/login/?moodleUserID=12346');
     exit;

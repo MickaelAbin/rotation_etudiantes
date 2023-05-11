@@ -29,7 +29,7 @@ class UserController extends AbstractController
         // check si l'utilisateur est en DB, et l'authentifie
         $user = $userRepository->findByID($id);
         if($user !== null) {
-            $request->request->set('moodleUserID', $id);
+            $request->request->set('moodleUserID', $user->getMoodleUserId());
             return $userAuthenticator->authenticateUser($user, $authenticator, $request);
         }
 
