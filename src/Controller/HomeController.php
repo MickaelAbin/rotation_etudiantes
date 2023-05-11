@@ -3,34 +3,27 @@
 namespace App\Controller;
 
 
-use App\Entity\AcademicLevel;
 use App\Entity\Enrolment;
-use App\Entity\UniversityCalendar;
 use App\Repository\EnrolmentRepository;
 use App\Repository\StudentRepository;
 use App\Service\GuardScheduler;
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-//    private ManagerRegistry $managerRegistry;
-//    public function __construct(ManagerRegistry $managerRegistry) {
-//        $this->managerRegistry = $managerRegistry;
-//    }
     /**
      * @Route(path = "/", name = "home")
      */
-    public function home()
+    public function home(): Response
     {
         return $this->render('home/index.html.twig');
     }
-    
+
     /**
      * @Route(path = "/calendrier/{id}", name = "calendrier",methods = {"GET"})
      */
