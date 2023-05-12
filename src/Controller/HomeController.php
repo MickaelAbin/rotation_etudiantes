@@ -5,15 +5,14 @@ namespace App\Controller;
 
 use App\Entity\AcademicLevel;
 use App\Entity\Enrolment;
-use App\Entity\UniversityCalendar;
-use App\Form\EndDateType;
+use App\Repository\AcademicLevelRepository;
 use App\Repository\EnrolmentRepository;
 use App\Repository\StudentRepository;
 use App\Service\GuardScheduler;
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,23 +20,51 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-//    private ManagerRegistry $managerRegistry;
-//    public function __construct(ManagerRegistry $managerRegistry) {
-//        $this->managerRegistry = $managerRegistry;
-//    }
-    /**
-     * @Route(path = "/", name = "home")
-     */
-    public function home()
+    private $academicLevelList;
+
+    public function __construct(AcademicLevelRepository $academicLevelRepository)
     {
-        return $this->render('home/index.html.twig');
+        $this->academicLevelList = $academicLevelRepository->findAll();
     }
 
     /**
-     * @Route(path = "/calendrier/{id}", name = "calendrier",methods = {"GET"})
+     * @Route(path = "/", name = "home")
      */
-    public function calendrier(EnrolmentRepository $enrolmentRepository, AcademicLevel $academicLevel = null): Response
+    public function home(): Response
     {
+        return $this->render('home/home.html.twig');
+    }
+
+    /**
+     * @Route(path = "/enrolments-by-categories", name = "enrolments_by_categories")
+     */
+    // TODO supprimer code fantôme "liste par date" (twig enrolments_by_categories) ou implémenter la fonctionnalité
+//    public function listeParDate(EnrolmentRepository $enrolmentRepository)
+//    {
+//        $events = $enrolmentRepository->listByDate();
+//        $creneaux=[];
+//        foreach ($events as $event){
+//            $creneaux[]=[
+//                'id'=>$event->getId(),
+//                'date'=>$event->getDate()->format('Y-m-d'),
+//                'title'=>($event->getStudent()->getLastName())." ".($event->getStudent()->getFirstName()." ".($event->getClinicalRotationCategory()->getLabel())),
+//                'backgroundColor'=>$event->getClinicalRotationCategory()->getColor(),
+//                'description'=>$event->getClinicalRotationCategory()->getLabel(),
+//                'startTime'=>$event->getClinicalRotationCategory()->getStartTime(),
+//                'endTime'=>$event->getClinicalRotationCategory()->getEndTime(),
+//
+//            ];
+//        }
+//        $data = json_encode($creneaux);
+//        return $this->render('home/enrolments_by_categories.twig', compact('data'));
+//    }
+
+    /**
+     * @Route(path = "/calendar/{id<[2,3,4,5,6]>}", defaults = {"id": 2}, name = "calendar", methods = {"GET"})
+     */
+    public function calendar(EnrolmentRepository $enrolmentRepository, AcademicLevel $academicLevel = null): Response
+    {
+        $academicLevelList = $this->academicLevelList;
         $events = $enrolmentRepository->listByAcademicLevelCalendrier($academicLevel->getId());
         $creneaux = [];
         foreach ($events as $event) {
@@ -51,41 +78,27 @@ class HomeController extends AbstractController
 
             ];
         }
-        $data = json_encode($creneaux);
-        return $this->render('home/calendrier.html.twig', compact('data', 'academicLevel'));
-    }
 
+        $data = json_encode($creneaux);
+        return $this->render('home/calendar.html.twig', compact('data','academicLevel', 'academicLevelList'));
+    }
 
     /**
-     * @Route(path = "/listeParDate", name = "listeParDate")
+     * @Route(path = "/enrolments-by-students/{id<[2,3,4,5,6]>}", defaults = {"id": 2}, name = "enrolments_by_students", methods = {"GET"})
      */
-    public function listeParDate(EnrolmentRepository $enrolmentRepository)
+    public function enrolmentsByStudents(StudentRepository $studentRepository, AcademicLevel $academicLevel = null): Response
     {
-        $events = $enrolmentRepository->listByDate();
-        $creneaux = [];
-        foreach ($events as $event) {
-            $creneaux[] = [
-                'id' => $event->getId(),
-                'date' => $event->getDate()->format('Y-m-d'),
-                'title' => ($event->getStudent()->getLastName()) . " " . ($event->getStudent()->getFirstName() . " " . ($event->getClinicalRotationCategory()->getLabel())),
-                'backgroundColor' => $event->getClinicalRotationCategory()->getColor(),
-                'description' => $event->getClinicalRotationCategory()->getLabel(),
-//                'startTime'=>$event->getClinicalRotationCategory()->getStartTime(),
-//                'endTime'=>$event->getClinicalRotationCategory()->getEndTime(),
+        $students = $studentRepository->listByAcademicLevel($academicLevel->getId());
 
-            ];
-        }
-        $data = json_encode($creneaux);
-        return $this->render('home/listeParDateCalendrier.html.twig', compact('data'));
+        return $this->render('home/enrolments_by_students.html.twig', [
+            'students' => $students,
+            'academicLevel' => $academicLevel,
+            'academicLevelList' => $this->academicLevelList,
+            'path' => 'enrolments_by_students',
+        ]);
     }
-//    /**
-//     * @Route(path = "/moodle", name = "moodle")
-//     */
-//    public function test(): Response
-//    {
-//        $connection = $this->managerRegistry->getConnection('mdl_user');
-//    }
 
+    // TODO Supprimer les routes test
 //    /**
 //     * @Route(path = "/test/{academicLevel}", name = "test")
 //     */
@@ -96,6 +109,7 @@ class HomeController extends AbstractController
 //        $clinicalRotationCategories = $guardScheduler->categorybyid($academicLevel);
 //        return $this->render('test.html.twig', ['availableDays' => $availableDays,'students' => $students,'clinicalRotationCategories'=>$clinicalRotationCategories]);
 //    }
+
     /**
      * @Route(path = "/test/{academicLevel}", name = "test",methods = {"GET"})
      */

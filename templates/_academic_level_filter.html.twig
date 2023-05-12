@@ -1,0 +1,9 @@
+<div class="d-flex justify-content-center">
+    <ul class="nav nav-pills">
+        {% for element in academicLevelList %}
+            <li class="nav-item">
+                <a class="nav-link {{ academicLevel.id == element.id ? 'active' }}" href="{{ path(app.request.get('_route'), {'id': element.id}) }}">{{ element.label }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

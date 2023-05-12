@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ parent() }}{% endblock %}
-{% block h2 %}Liste par date{% endblock %}
+{% block h2 %}Calendrier{% endblock %}
 
 
 
@@ -12,15 +12,14 @@
 
 {% block main %}
 
+    {{ include('_academic_level_filter.html.twig') }}
+
     <div id="calendrier" data-events="{{ data }}"></div>
 
-
-
-{% endblock %}
+{% endblock main %}
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js" integrity="sha256-dHUNnePy81fXq4D/wfu7cPsEIP7zl6MvLb84jtZf+UY=" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/listeParDate.js') }}"></script>
+    <script src="{{ asset('js/calendar.js') }}"></script>
 {% endblock %}
-
 
 
