@@ -65,6 +65,7 @@ class GuardScheduler
             ->leftJoin('s.enrolments', 'e')
             ->addSelect('COUNT(e) AS HIDDEN enrolment_count')
             ->where('s.academicLevel = :academicLevel')
+            ->andWhere('s.isOnRotationSchedule = true')
             ->setParameter('academicLevel', $academicLevelId)
             ->groupBy('s.moodleUserID')
             ->orderBy('enrolment_count', 'DESC')

@@ -1,18 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
 
-{% endblock %}
-
-{% block main %}
-    dump($availableDays)
-    <h2>Available Days:</h2>
-    <ul>
-        {% for day in availableDays %}
-            <li>{{ day|date('Y-m-d') }}</li>
-        {% endfor %}
+{% block body %}
+    <div></div>
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 2 ? 'active' }}" href="{{ path('test2', {'id': 2}) }}">Vet2</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 3 ? 'active' }}" href="{{ path('test2', {'id': 3}) }}">Vet3</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ academicLevel.id == 4 ? 'active' }}" href="{{ path('test2', {'id': 4}) }}">Vet4</a>
+        </li>
     </ul>
-
-
+    </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Choisir la date de fin</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="form-group">
+                            {{ form_label(form.endDate) }}
+                            {{ form_widget(form.endDate, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
