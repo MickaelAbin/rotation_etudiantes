@@ -4,19 +4,9 @@
 {% block h2 %}Liste par étudiant{% endblock %}
 
 {% block main %}
-    <div></div>
-    <ul class="nav nav-pills">
-        <li class="nav-item">
-            <a class="nav-link {{ academicLevel.id == 2 ? 'active' }}" href="{{ path('student_list', {'id': 2}) }}">Vet2</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ academicLevel.id == 3 ? 'active' }}" href="{{ path('student_list', {'id': 3}) }}">Vet3</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ academicLevel.id == 4 ? 'active' }}" href="{{ path('student_list', {'id': 4}) }}">Vet4</a>
-        </li>
-    </ul>
-    </div>
+
+    {{ include('_academic_level_filter.html.twig') }}
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -46,5 +36,5 @@
         </tbody>
     </table>
 
-{% endblock %}
+{% endblock main %}
 
