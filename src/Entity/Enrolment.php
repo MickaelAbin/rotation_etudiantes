@@ -35,13 +35,13 @@ class Enrolment
     private ?ExchangeRequest $proposedExchange = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity = ClinicalRotationCategory::class, fetch = "EAGER")
+     * @ORM\ManyToOne(targetEntity = ClinicalRotationCategory::class)
      * @ORM\JoinColumn(name = "clinical_rotation_category_id", nullable = false, options = {"unsigned": true})
      */
     private ?ClinicalRotationCategory $clinicalRotationCategory = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity = Student::class, inversedBy = "enrolments", fetch = "EAGER")
+     * @ORM\ManyToOne(targetEntity = Student::class, inversedBy = "enrolments")
      * @ORM\JoinColumn(name = "student_id", referencedColumnName = "moodle_user_id", nullable=false, options = {"unsigned": true})
      */
     private ?Student $student = null;

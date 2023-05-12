@@ -21,7 +21,13 @@ class UserController extends AbstractController
     public function login(Request $request, UserAuthenticatorInterface $userAuthenticator, AuthenticatorInterface $authenticator,
                          UserRepository $userRepository): ?Response
     {
-        $request->getSession()->set('moodleID', 12346);
+        // id Super Admin
+        //$request->getSession()->set('moodleID', 12346);
+        // id Admin
+        //$request->getSession()->set('moodleID', 12346);
+
+        // id Etudiant
+        $request->getSession()->set('moodleID', 15018);
 
         $id = $request->getSession()->get('moodleID');
 
