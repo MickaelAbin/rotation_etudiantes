@@ -15,12 +15,9 @@ class EndDateType extends AbstractType
     {
         $builder
             ->add('endDate', DateType::class, [
+                'input' => 'datetime_immutable',
                 'label' => 'Date de fin',
                 'widget' => 'single_text',
-                'html5' => false,
-                'format' => 'dd/MM/yyyy',
-                'attr' => ['class' => 'js-datepicker'],
-                'data' => $options['endDate']
             ]);
     }
 
@@ -28,10 +25,6 @@ class EndDateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => UniversityCalendar::class,
-            'endDate' => null,
-            'constraints' => [
-                new NotNull()
-            ]
         ]);
     }
 }
