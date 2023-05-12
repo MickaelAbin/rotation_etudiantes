@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\AcademicLevel;
 use App\Entity\ClinicalRotationCategory;
 use App\Entity\Enrolment;
 use App\Entity\Student;
@@ -89,5 +90,15 @@ class EnrolmentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
 
+    }
+    public function findFirstEnrolmentForAcademicLevel(int $academicLevel): ?Enrolment
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->andWhere('e.id = :academicLevel')
+            ->orderBy('e.date', 'ASC')
+            ->setParameter('academicLevel', $academicLevel)
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

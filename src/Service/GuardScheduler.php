@@ -7,6 +7,7 @@ use App\Repository\PublicHolidayRepository;
 use App\Repository\ClinicalRotationCategoriesRepository;
 use App\Repository\NoRotationPeriodRepository;
 use App\Repository\StudentRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
 class GuardScheduler
@@ -28,17 +29,20 @@ class GuardScheduler
         $this->ClinicalRotationCategoriesRepository = $clinicalRotationCategoriesRepository;
     }
 
-    public function createAvailableDaysArray(int $academicLevel)
+    public function createAvailableDaysArray(int $academicLevel, DateTimeImmutable $startDate, DateTimeImmutable $endDate)
     {
         // Récupération de la plage de dates correspondant à l'academic level spécifié
         $universityCalendar = $this->entityManager->getRepository(UniversityCalendar::class)->findOneBy(['academicLevel' => $academicLevel]);
+
+        // Vérification que $universityCalendar n'est pas null avant d'essayer de récupérer les périodes sans garde
+        if (!$universityCalendar) {
+            throw new \Exception('Calendrier universitaire introuvable pour cet academic level.');
+        }
 
         // Récupération des périodes sans garde
         $noRotationPeriods = $universityCalendar->getNoRotationPeriods();
 
         // Création d'un tableau de dates avec tous les jours de la promotion
-        $startDate = new \DateTime($universityCalendar->getStartDate()->format('Y-m-d'));
-        $endDate = new \DateTime($universityCalendar->getEndDate()->format('Y-m-d'));
         $interval = new \DateInterval('P1D');
         $dateRange = new \DatePeriod($startDate, $interval, $endDate);
         $availableDays = [];

@@ -5,6 +5,8 @@ namespace App\Controller;
 
 use App\Entity\AcademicLevel;
 use App\Entity\Enrolment;
+use App\Entity\UniversityCalendar;
+use App\Form\EndDateType;
 use App\Repository\AcademicLevelRepository;
 use App\Repository\EnrolmentRepository;
 use App\Repository\StudentRepository;
@@ -14,7 +16,6 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -179,31 +180,45 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route(path = "/test2/{academicLevel}", name = "test2",methods = {"GET"})
+     * @Route(path="/test2/{id<[2,3,4,5,6]>}",defaults = {"id": 2}, name="test2", methods={"GET", "POST"})
      */
-    public function test2(Request $request, GuardScheduler $guardScheduler, EntityManagerInterface $entityManager, int $academicLevel)
+    public function test2(Request $request, GuardScheduler $guardScheduler, EntityManagerInterface $entityManager, AcademicLevel $academicLevel= null)
     {
-        $availableDays = $guardScheduler->createAvailableDaysArray($academicLevel);
-        $students = $guardScheduler->shuffleUsersByAcademicLevel($academicLevel);
-        $clinicalRotationCategories = $guardScheduler->categorybyid($academicLevel);
-        $holidaysDates = $guardScheduler->createAvailableDaysHolidaysArray($academicLevel);
+
+
+        $students = $guardScheduler->shuffleUsersByAcademicLevel($academicLevel->getId());
+        $clinicalRotationCategories = $guardScheduler->categorybyid($academicLevel->getId());
+        $holidaysDates = $guardScheduler->createAvailableDaysHolidaysArray($academicLevel->getId());
         $lastStudentIndex = 0;
         $nbStudents = count($students);
+
         // Récupération de la date de fin du UniversityCalendar pour l'AcademicLevel
         $universityCalendar = $entityManager->getRepository(UniversityCalendar::class)->findOneBy(['academicLevel' => $academicLevel]);
         $endDate = $universityCalendar ? $universityCalendar->getEndDate() : null;
+
+        // Affichage du message d'erreur si aucun UniversityCalendar n'a été trouvé
+        if (!$universityCalendar) {
+            return $this->render('test2.html.twig', [
+                'message' => 'Aucun calendrier universitaire n\'a été trouvé pour cet AcademicLevel',
+            ]);
+        }
+
+        // Récupération de la date de début du UniversityCalendar pour l'AcademicLevel
+        $enrolmentRepository = $entityManager->getRepository(Enrolment::class);
+        $firstEnrolment = $enrolmentRepository->findFirstEnrolmentForAcademicLevel($academicLevel->getId());
+        $firstDate = $firstEnrolment ? $firstEnrolment->getDate() : $universityCalendar->getStartDate();
+        $availableDays = $guardScheduler->createAvailableDaysArray($academicLevel->getId(),$firstDate,$endDate);
 
         // Création du formulaire pour choisir la date de fin
         $universityCalendar = new UniversityCalendar();
         $universityCalendar->setEndDate($endDate); // Date de fin par défaut
 
         $form = $this->createForm(EndDateType::class, $universityCalendar);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $form->getData();
-            $endDate = $formData->getEndDate();
+            $endDate = $form->getData()->getEndDate();
+
             foreach ($availableDays as $day) {
                 $isWeekend = $day->format('N') >= 6; // Le samedi (6) et dimanche (7) sont considérés comme des week-ends
 
@@ -211,40 +226,20 @@ class HomeController extends AbstractController
                     $isWeekend = true;
                 }
 
-                if ($isWeekend) { // création des enrolments pour les week-ends et les jours fériés
-                    foreach ($clinicalRotationCategories as $category) {
-                        if ($category->isIsOnWeekend()) {
-                            $categoryStudentsCount = $category->getNbStudents();
-                            $studentIndex = ($lastStudentIndex % $nbStudents);
+                foreach ($clinicalRotationCategories as $category) {
+                    if ($category->isIsOnWeekend() === $isWeekend) { // création des enrolments pour les jours de la semaine ou les week-ends
+                        $categoryStudentsCount = $category->getNbStudents();
+                        $studentIndex = $lastStudentIndex % $nbStudents;
 
-                            for ($i = 0; $i < $categoryStudentsCount; $i++) {
-                                $enrolment = new Enrolment();
-                                $enrolment->setDate(DateTimeImmutable::createFromMutable($day));
-                                $enrolment->setClinicalRotationCategory($category);
-                                $enrolment->setStudent($students[$studentIndex]);
-                                $entityManager->persist($enrolment);
+                        for ($i = 0; $i < $categoryStudentsCount; $i++) {
+                            $enrolment = new Enrolment();
+                            $enrolment->setDate(DateTimeImmutable::createFromMutable($day));
+                            $enrolment->setClinicalRotationCategory($category);
+                            $enrolment->setStudent($students[$studentIndex]);
+                            $entityManager->persist($enrolment);
 
-                                $lastStudentIndex++;
-                                $studentIndex = ($lastStudentIndex % $nbStudents);
-                            }
-                        }
-                    }
-                } else { // création des enrolments pour les jours de semaine
-                    foreach ($clinicalRotationCategories as $category) {
-                        if (!$category->isIsOnWeekend()) {
-                            $categoryStudentsCount = $category->getNbStudents();
-                            $studentIndex = ($lastStudentIndex % $nbStudents);
-
-                            for ($i = 0; $i < $categoryStudentsCount; $i++) {
-                                $enrolment = new Enrolment();
-                                $enrolment->setDate(DateTimeImmutable::createFromMutable($day));
-                                $enrolment->setClinicalRotationCategory($category);
-                                $enrolment->setStudent($students[$studentIndex]);
-                                $entityManager->persist($enrolment);
-
-                                $lastStudentIndex++;
-                                $studentIndex = ($lastStudentIndex % $nbStudents);
-                            }
+                            $lastStudentIndex++;
+                            $studentIndex = $lastStudentIndex % $nbStudents;
                         }
                     }
                 }
@@ -252,13 +247,31 @@ class HomeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->render('test.html.twig', [
+            return $this->render('test2.html.twig', [
                 'message' => 'Enrolments created successfully',
                 'availableDays' => $availableDays,
                 'students' => $students,
                 'clinicalRotationCategories' => $clinicalRotationCategories,
-                'form' => $form->createView()
+                'academicLevelList' => $this->academicLevelList,
+                'endDate' => $endDate,
+                'firstDate'=>$firstDate,
+                'form' => $form->createView(),
+
             ]);
         }
+
+
+        return $this->render('test2.html.twig', [
+            'message' => 'Enrolments created erreur',
+            'students' => $students,
+            'availableDays' => $availableDays,
+            'clinicalRotationCategories' => $clinicalRotationCategories,
+            'academicLevelList' => $this->academicLevelList,
+            'academicLevel' => $academicLevel,
+            'endDate' => $endDate,
+            'firstDate'=>$firstDate,
+            'form' => $form->createView()
+        ]);
     }
+
 }

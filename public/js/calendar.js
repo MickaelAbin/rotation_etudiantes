@@ -22,8 +22,11 @@ window.onload = () => {
         weekNumbers : true,
         weekText : "S",
         nowIndicator: true,
+        selectable : true,
 
         events : data,
+
     })
     calendar.render()
+
 }
