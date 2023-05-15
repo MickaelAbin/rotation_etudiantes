@@ -45,7 +45,7 @@ class Student extends User
 
     public function __toString()
     {
-        return 'Étudiant ' . parent::__toString();
+        return parent::__toString();
     }
 
     /**

@@ -86,11 +86,15 @@ class HomeController extends AbstractController
             $creneaux[] = [
                 'id' => $event->getId(),
                 'date' => $event->getDate()->format('Y-m-d'),
-                'title' => ($event->getStudent()->getLastName()) . " " . ($event->getStudent()->getFirstName() . " " . ($event->getClinicalRotationCategory()->getLabel())),
+                'title' => $event->getClinicalRotationCategory()->getStartTime()->format('H') . 'h ' . $event->getStudent(),
                 'backgroundColor' => $event->getClinicalRotationCategory()->getColor(),
-                'description' => $event->getClinicalRotationCategory()->getLabel(),
-
-
+                'extendedProps' => [
+                    'student' => (string) $event->getStudent(),
+                    'academicLevel' => $event->getStudent()->getAcademicLevel()->getLabel(),
+                    'clinicalRotationCategory' => $event->getClinicalRotationCategory()->getLabel(),
+                    'startTime' => $event->getClinicalRotationCategory()->getStartTime()->format('H'),
+                    'endTime' => $event->getClinicalRotationCategory()->getEndTime()->format('H'),
+                ]
             ];
         }
 
