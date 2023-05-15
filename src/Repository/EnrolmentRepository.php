@@ -91,14 +91,15 @@ class EnrolmentRepository extends ServiceEntityRepository
             ->getResult();
 
     }
-    public function findFirstEnrolmentForAcademicLevel(int $academicLevel): ?Enrolment
+    public function findLastEnrolmentForAcademicLevel(int $academicLevelID): ?Enrolment
     {
-        $qb = $this->createQueryBuilder('e')
-            ->andWhere('e.id = :academicLevel')
-            ->orderBy('e.date', 'ASC')
-            ->setParameter('academicLevel', $academicLevel)
-            ->setMaxResults(1);
-
-        return $qb->getQuery()->getOneOrNullResult();
+        return $this->createQueryBuilder('e')
+            ->innerJoin(Student::class,'student', Join::WITH, 'student.moodleUserID = e.student')
+            ->where('student.academicLevel = :academic_level_id')
+            ->setParameter('academic_level_id', $academicLevelID)
+            ->orderBy('e.date', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
