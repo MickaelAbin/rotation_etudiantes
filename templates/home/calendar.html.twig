@@ -6,7 +6,7 @@
 
 
 {% block stylesheets%}
-    <link rel="stylesheet" href="{{ asset('css/calendrier.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/calendar.css') }}">
 
 {% endblock %}
 
@@ -15,6 +15,26 @@
     {{ include('_academic_level_filter.html.twig') }}
 
     <div id="calendrier" data-events="{{ data }}"></div>
+
+{#  Modale pour les Enrolments du calendrier  #}
+    <div class="modal fade" id="enrolmentModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="enrolmentModalLabel">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="enrolmentModalTitle">{{ modalTitle | default('Change Title') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="enrolmentModalBody">
+                    <div id="enrolmentDate"></div>
+                    <div id="enrolmentCategory"></div>
+                    <div id="enrolmentTime"></div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ modalDismiss | default('Fermer')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock main %}
 {% block javascripts %}

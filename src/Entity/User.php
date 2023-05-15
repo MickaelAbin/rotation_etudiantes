@@ -47,6 +47,16 @@ abstract class User implements UserInterface
         return ucfirst($this->firstName) . ' ' . strtoupper($this->lastName);
     }
 
+    public function isInstanceOfStudent(): bool
+    {
+        return $this instanceof Student;
+    }
+
+    public function isInstanceOfAdmin(): bool
+    {
+        return $this instanceof Admin;
+    }
+
     public function getMoodleUserId(): ?int
     {
         return $this->moodleUserID;

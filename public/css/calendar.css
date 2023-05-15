@@ -5,3 +5,7 @@
 .fc-list-event-time {
     display:none;
 }
+
+.fc-event {
+    cursor: pointer;
+}

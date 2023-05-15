@@ -41,7 +41,7 @@ class Enrolment
     private ?ClinicalRotationCategory $clinicalRotationCategory = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity = Student::class, inversedBy = "enrolments", fetch = "EAGER")
+     * @ORM\ManyToOne(targetEntity = Student::class, inversedBy = "enrolments")
      * @ORM\JoinColumn(name = "student_id", referencedColumnName = "moodle_user_id", nullable=false, options = {"unsigned": true})
      */
     private ?Student $student = null;

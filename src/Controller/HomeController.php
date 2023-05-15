@@ -4,7 +4,9 @@ namespace App\Controller;
 
 
 use App\Entity\AcademicLevel;
+use App\Entity\Admin;
 use App\Entity\Enrolment;
+use App\Entity\Student;
 use App\Entity\UniversityCalendar;
 use App\Repository\AcademicLevelRepository;
 use App\Repository\EnrolmentRepository;
@@ -33,6 +35,18 @@ class HomeController extends AbstractController
      */
     public function home(): Response
     {
+        $user = $this->getUser();
+
+        if ($user instanceof Admin)
+        {
+            return $this->render('home/home_admin.html.twig');
+        }
+
+        if ($user instanceof Student)
+        {
+            return $this->render('home/home_student.html.twig');
+        }
+
         return $this->render('home/home.html.twig');
     }
 
@@ -72,11 +86,15 @@ class HomeController extends AbstractController
             $creneaux[] = [
                 'id' => $event->getId(),
                 'date' => $event->getDate()->format('Y-m-d'),
-                'title' => ($event->getStudent()->getLastName()) . " " . ($event->getStudent()->getFirstName() . " " . ($event->getClinicalRotationCategory()->getLabel())),
+                'title' => $event->getClinicalRotationCategory()->getStartTime()->format('H') . 'h ' . $event->getStudent(),
                 'backgroundColor' => $event->getClinicalRotationCategory()->getColor(),
-                'description' => $event->getClinicalRotationCategory()->getLabel(),
-
-
+                'extendedProps' => [
+                    'student' => (string) $event->getStudent(),
+                    'academicLevel' => $event->getStudent()->getAcademicLevel()->getLabel(),
+                    'clinicalRotationCategory' => $event->getClinicalRotationCategory()->getLabel(),
+                    'startTime' => $event->getClinicalRotationCategory()->getStartTime()->format('H'),
+                    'endTime' => $event->getClinicalRotationCategory()->getEndTime()->format('H'),
+                ]
             ];
         }
 
@@ -89,7 +107,7 @@ class HomeController extends AbstractController
      */
     public function enrolmentsByStudents(StudentRepository $studentRepository, AcademicLevel $academicLevel = null): Response
     {
-        $students = $studentRepository->listByAcademicLevel($academicLevel->getId());
+        $students = $studentRepository->getStudentsWithEnrolmentsByAcademicLevel($academicLevel->getId());
 
         return $this->render('home/enrolments_by_students.html.twig', [
             'students' => $students,

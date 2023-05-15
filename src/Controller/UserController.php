@@ -16,24 +16,30 @@ use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 class UserController extends AbstractController
 {
     /**
-    * @Route(path = "/login", name = "login", methods = {"GET"})
+    * @Route(path = "/login/{id}", requirements={"id" = "^\d+$"}, name = "login", methods = {"GET"})
     */
     public function login(Request $request, UserAuthenticatorInterface $userAuthenticator, AuthenticatorInterface $authenticator,
-                         UserRepository $userRepository): ?Response
+                         UserRepository $userRepository, int $id): ?Response
     {
-        $request->getSession()->set('moodleID', 12346);
+        // TODO supprimer ghost code
+        // id Super Admin
+        //$request->getSession()->set('moodleID', 12346);
+        // id Admin
+//        $request->getSession()->set('moodleID', 12346);
 
-        $id = $request->getSession()->get('moodleID');
+        // id Etudiant
+        // $request->getSession()->set('moodleID', 15018);
+        // $id = $request->getSession()->get('moodleID');
 
 
-        // check si l'utilisateur est en DB, et l'authentifie
+        // check si l'utilisateur est en DB, puis l'authentifie (cf. app/Security/Authenticator.php)
         $user = $userRepository->findByID($id);
         if($user !== null) {
             $request->request->set('moodleUserID', $user->getMoodleUserId());
             return $userAuthenticator->authenticateUser($user, $authenticator, $request);
         }
 
-        throw new AccessDeniedException();
+        throw new AccessDeniedException("Accès non autorisé");
     }
 
     /**

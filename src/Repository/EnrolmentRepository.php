@@ -43,42 +43,6 @@ class EnrolmentRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Enrolment[] Returns an array of Enrolment objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Enrolment
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
-
-    public function listByDate()
-    {
-        return $this->createQueryBuilder('enrolment')
-            ->innerJoin(Student::class,'student', Join::WITH, 'enrolment.student = student.moodleUserID  ')
-            ->innerJoin(ClinicalRotationCategory::class,'category', Join::WITH, 'enrolment.clinicalRotationCategory = category.id')
-            ->where('student.academicLevel = :academic_level_id')
-            ->setParameter('academic_level_id', 3)
-            ->getQuery()
-            ->getResult();
-
-    }
     public function listByAcademicLevelCalendrier(int $academicLevelID)
     {
         return $this->createQueryBuilder('enrolment')
