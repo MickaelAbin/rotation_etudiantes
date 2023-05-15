@@ -26,12 +26,14 @@ class ClinicalRotationCategoryType extends AbstractType
 
             ->add('startTime', TimeType::class,[
                 'input' => 'datetime_immutable',
-                'label' => 'Heure de début'
+                'label' => 'Heure de début',
+
             ])
 
             ->add('endTime', TimeType::class,[
                 'input' => 'datetime_immutable',
-                'label' => 'Heure de fin'
+                'label' => 'Heure de fin',
+
             ])
 
             ->add('nbStudents', IntegerType::class,[

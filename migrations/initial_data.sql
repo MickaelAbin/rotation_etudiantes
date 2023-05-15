@@ -23,7 +23,7 @@ INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, 
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
     VALUES (3, 'Équine nuit', '18:00:00', '22:00:00', 2, 0, null); 
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
-    VALUES (3, 'Équine jour', '09:00:00', '12:00:00', 2, 1, null); 
+    VALUES (3, 'Équine jour WE', '09:00:00', '12:00:00', 2, 1, null);
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
     VALUES (3, 'Équine nuit WE', '18:00:00', '22:00:00', 2, 1, null); 
 
@@ -31,12 +31,12 @@ INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, 
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
     VALUES (4, 'Urgences nuit', '18:00:00', '24:00:00', 1, 0, null); 
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
-    VALUES (4, 'Urgences jour', '08:30:00', '18:00:00', 1, 1, null); 
+    VALUES (4, 'Urgences jour WE', '08:30:00', '18:00:00', 1, 1, null);
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
     VALUES (4, 'Urgences nuit WE', '18:00:00', '24:00:00', 1, 1, null); 
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
     VALUES (4, 'SI nuit', '18:00:00', '24:00:00', 1, 0, null); 
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
-    VALUES (4, 'SI jour', '08:30:00', '18:00:00', 2, 1, null);
+    VALUES (4, 'SI jour WE', '08:30:00', '18:00:00', 2, 1, null);
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
     VALUES (4, 'SI nuit WE', '18:00:00', '24:00:00', 1, 1, null);

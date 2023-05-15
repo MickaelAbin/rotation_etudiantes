@@ -86,7 +86,10 @@ class GuardScheduler
             $groupedStudents[$enrolmentCount][] = $student;
         }
 
-        // Mélanger les groupes d'étudiants et les concaténer
+        // Trier les groupes d'étudiants par nombre d'enrolments (ordre croissant)
+        ksort($groupedStudents);
+
+// Mélanger les étudiants dans chaque groupe et les concaténer dans le tableau final
         $shuffledStudents = [];
         foreach ($groupedStudents as $group) {
             shuffle($group);

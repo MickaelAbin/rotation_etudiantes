@@ -42,7 +42,6 @@ class ClinicalRotationCategory
 
     /**
      * @Assert\NotBlank(message = "L'heure de fin doit être renseignée")
-     * @Assert\GreaterThan(propertyPath = "startTime", message = "L'heure de fin doit être supérieure à l'heure de début")
      * @ORM\Column(name = "end_time", type = "time_immutable", nullable = false)
      */
     private ?DateTimeImmutable $endTime = null;

@@ -1,4 +1,6 @@
 {% extends 'base.html.twig' %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block h2 %}Attribution des gardes{% endblock %}
 
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
@@ -10,9 +12,10 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="text-center">Choisir la date de fin</h3>
-                        {{ dump(endDate) }}
-                        {{ dump(firstDate) }}
                     </div>
+                    {% if universityCalendar is null %}
+                    <p>Aucun calendrier universitaire n'a été trouvé pour cette promotion. Veuillez créer un calendrier universitaire.</p>
+                    {% else %}
                     <div class="card-body">
                         {{ form_start(form) }}
                         <div class="form-group">
@@ -20,12 +23,14 @@
                             {{ form_widget(form.endDate, {'attr': {'class': 'form-control'}, 'value': endDate|date('Y-m-d')}) }}
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            <button type="submit" class="btn btn-primary">Remplir</button>
                         </div>
                         {{ form_end(form) }}
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
+
