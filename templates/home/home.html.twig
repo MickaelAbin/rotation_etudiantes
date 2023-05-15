@@ -4,15 +4,29 @@
 
 {% block h2 %}{% endblock %}
 
-
 {% block main %}
+    <div class="d-flex flex-column align-items-center">
 
+        <div class="row d-flex mb-3">
+            <a type="button" class="btn btn-primary" href="{{ path('login', {'id' : 12345}) }}">
+                Login Super Admin
+            </a>
+        </div>
 
-<div class="">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-        Launch demo modal
-    </button>
-</div>
+        <div class="row d-flex mb-3">
+            <a type="button" class="btn btn-primary" href="{{ path('login', {'id' : 12346}) }}">
+                Login Admin
+            </a>
+        </div>
+
+        <div class="row d-flex mb-3">
+            <a type="button" class="btn btn-primary" href="{{ path('login', {'id' : 15018}) }}">
+                Login Student
+            </a>
+        </div>
+
+    </div>
 
 {{ include('_modal.html.twig', {modalTitle: 'Test'}) }}
+
 {% endblock %}

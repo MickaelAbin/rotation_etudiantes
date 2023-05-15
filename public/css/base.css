@@ -23,6 +23,10 @@ section {
     flex: auto;
 }
 
+table {
+    table-layout: fixed;
+}
+
 #footer {
     margin-top: auto;
 }

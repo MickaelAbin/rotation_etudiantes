@@ -16,6 +16,24 @@
 
     <div id="calendrier" data-events="{{ data }}"></div>
 
+{#  Modale pour les Enrolments du calendrier  #}
+    <div class="modal fade" id="enrolmentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="enrolmentModalLabel">{{ modalTitle | default('Change Title') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ modalBody | default('En cours de chargement...')}}
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ modalDismiss | default('Fermer')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock main %}
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js" integrity="sha256-dHUNnePy81fXq4D/wfu7cPsEIP7zl6MvLb84jtZf+UY=" crossorigin="anonymous"></script>

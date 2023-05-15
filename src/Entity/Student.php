@@ -27,7 +27,7 @@ class Student extends User
     private ?bool $isOnRotationSchedule = null;
 
     /**
-     * @ORM\OneToMany(targetEntity = Enrolment::class, mappedBy = "student")
+     * @ORM\OneToMany(targetEntity = Enrolment::class, mappedBy = "student", fetch = "EAGER")
      */
     private Collection $enrolments;
 

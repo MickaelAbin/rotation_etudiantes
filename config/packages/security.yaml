@@ -20,6 +20,7 @@ security:
                 class: App\Entity\Student
                 property: moodleUserID
 
+        # Utilisation d'une chaîne de providers pour les Users (Student & Admin)
         app_user_provider:
             chain:
                 providers: ['app_admin_provider', 'app_student_provider']

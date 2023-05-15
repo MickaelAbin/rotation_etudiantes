@@ -57,17 +57,18 @@ class StudentRepository extends ServiceEntityRepository
 //
 //        return $qb->getQuery()->getResult();
 //    }
-    public function listByAcademicLevel(int $academicLevelID)
+
+   public function getStudentsWithEnrolmentsByAcademicLevel(int $academicLevelID)
     {
-        return $this->createQueryBuilder('student')
-//            ->select('student', 'enrolment', 'category')
-            ->innerJoin(Enrolment::class,'enrolment', Join::WITH, 'student.moodleUserID = enrolment.student')
-            ->innerJoin(ClinicalRotationCategory::class,'category', Join::WITH, 'enrolment.clinicalRotationCategory = category.id')
-            ->where('student.academicLevel = :academic_level_id')
-            ->setParameter('academic_level_id', $academicLevelID)
+        return  $this->createQueryBuilder('student')
+            ->innerJoin(Enrolment::class, 'enrolment', Join::WITH, 'student.moodleUserID = enrolment.student')
+            ->innerJoin(ClinicalRotationCategory::class, 'category', Join::WITH, 'enrolment.clinicalRotationCategory = category.id')
+            ->where('student.academicLevel = :academicLevelID')
+            ->setParameter('academicLevelID', $academicLevelID)
             ->orderBy('student.lastName', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+            ;
 
     }
 

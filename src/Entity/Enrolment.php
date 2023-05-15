@@ -35,7 +35,7 @@ class Enrolment
     private ?ExchangeRequest $proposedExchange = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity = ClinicalRotationCategory::class)
+     * @ORM\ManyToOne(targetEntity = ClinicalRotationCategory::class, fetch = "EAGER")
      * @ORM\JoinColumn(name = "clinical_rotation_category_id", nullable = false, options = {"unsigned": true})
      */
     private ?ClinicalRotationCategory $clinicalRotationCategory = null;
