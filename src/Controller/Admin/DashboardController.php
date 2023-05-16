@@ -47,14 +47,15 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Service Formation');
         yield MenuItem::linkToCrud('Administrateurs', 'far fa-user', Admin::class);
 
-        yield MenuItem::section('Promotions');
+        yield MenuItem::section('Gestion des promotions');
         yield MenuItem::linkToCrud('Étudiants', 'fas fa-user', Student::class);
         yield MenuItem::linkToCrud('Calendriers universitaires', 'fas fa-calendar', UniversityCalendar::class);
         yield MenuItem::linkToCrud('Catégories de garde', 'fas fa-notes-medical', ClinicalRotationCategory::class);
 
-        // TODO set permission
-        yield MenuItem::section('Super Admin');
-        yield MenuItem::linkToCrud('Niveaux académiques', 'fas fa-graduation-cap', AcademicLevel::class);
+        // yield MenuItem::section('Gestion des plannings');
+
+        yield MenuItem::section('Super Admin')->setPermission('ROLE_SUPER_ADMIN');
+        yield MenuItem::linkToCrud('Niveaux académiques', 'fas fa-graduation-cap', AcademicLevel::class)->setPermission('ROLE_SUPER_ADMIN');
 
         yield MenuItem::section();
         yield MenuItem::linkToUrl('Retour au site', 'fa fa-home', '/');

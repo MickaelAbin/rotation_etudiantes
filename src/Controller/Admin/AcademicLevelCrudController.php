@@ -18,18 +18,16 @@ class AcademicLevelCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            // TODO set permission
-            //->setEntityPermission('ROLE_SUPER_ADMIN')
+            ->setEntityPermission('ROLE_SUPER_ADMIN')
             ->setEntityLabelInSingular('Niveau académique')
             ->setEntityLabelInPlural('Niveaux académiques')
-            ->setDefaultSort(['id' => 'ASC'])
             ;
     }
 
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id', 'ID')->hideOnForm(),
+            IdField::new('id', 'ID')->hideWhenCreating(),
             TextField::new('label', 'Libellé'),
         ];
     }

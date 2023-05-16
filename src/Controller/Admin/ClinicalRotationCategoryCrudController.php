@@ -63,7 +63,7 @@ class ClinicalRotationCategoryCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id', 'ID')->hideOnForm()->setPermission('ROLE_SUPER_ADMIN'),
+            IdField::new('id', 'ID')->setPermission('ROLE_SUPER_ADMIN'),
             TextField::new('label', 'Libellé'),
             AssociationField::new('academicLevel', 'Promotion'),
             TimeField::new('startTime', 'Heure de début'),

@@ -54,9 +54,7 @@ class StudentCrudController extends AbstractCrudController
             AssociationField::new('academicLevel', 'Promotion'),
             TextField::new('email', 'Email'),
             BooleanField::new('isOnRotationSchedule', 'De planning de garde'),
-            ArrayField::new('roles', 'Rôles')->hideWhenCreating()
-            // TODO set permissions
-            //->setPermission('ROLE_SUPER_ADMIN'),
+            ArrayField::new('roles', 'Rôles')->hideWhenCreating()->setPermission('ROLE_SUPER_ADMIN'),
         ];
     }
 }

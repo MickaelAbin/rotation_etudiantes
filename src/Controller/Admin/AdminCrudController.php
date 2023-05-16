@@ -31,9 +31,7 @@ class AdminCrudController extends AbstractCrudController
             IdField::new('moodleUserID', 'ID Moodle'),
             TextField::new('firstName', 'Prénom'),
             TextField::new('lastName', 'Nom'),
-            ArrayField::new('roles', 'Rôles')->hideWhenCreating()
-                // TODO set permissions
-                //->setPermission('ROLE_SUPER_ADMIN'),
+            ArrayField::new('roles', 'Rôles')->hideWhenCreating()->setPermission('ROLE_SUPER_ADMIN'),
         ];
     }
 
