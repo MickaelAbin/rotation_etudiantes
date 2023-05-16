@@ -25,7 +25,7 @@ class Enrolment
     private ?DateTimeImmutable $date = null;
 
     /**
-     * @ORM\OneToOne(targetEntity = ExchangeRequest::class, mappedBy = "desiredEnrolment")
+     * @ORM\OneToOne(targetEntity = ExchangeRequest::class, mappedBy = "requestedEnrolment")
      */
     private ?ExchangeRequest $requestedExchange = null;
 
@@ -70,8 +70,8 @@ class Enrolment
     public function setRequestedExchange(ExchangeRequest $requestedExchange): self
     {
         // set the owning side of the relation if necessary
-        if ($requestedExchange->getDesiredEnrolment() !== $this) {
-            $requestedExchange->setDesiredEnrolment($this);
+        if ($requestedExchange->getRequestedEnrolment() !== $this) {
+            $requestedExchange->setRequestedEnrolment($this);
         }
 
         $this->requestedExchange = $requestedExchange;

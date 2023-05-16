@@ -16,7 +16,7 @@
 
     <div id="calendrier" data-events="{{ data }}"></div>
 
-{#  Modale pour les Enrolments du calendrier  #}
+{#  Modale pour les Enrolments du calendrier, le contenu est rempli par javascript (cf. calendar.js)  #}
     <div class="modal fade" id="enrolmentModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="enrolmentModalLabel">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -24,11 +24,15 @@
                     <h5 class="modal-title" id="enrolmentModalTitle">{{ modalTitle | default('Change Title') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body justify-content-center" id="enrolmentModalBody">
+                <div class="modal-body" id="enrolmentModalBody">
                     <div id="enrolmentDate"></div>
                     <div id="enrolmentCategory"></div>
                     <div id="enrolmentTime"></div>
-                    <div id="justify-content-center"></div>
+                    {% if app.user is instanceOfStudent %}
+                        <div class="row justify-content-center m-2 mb-0">
+                            <a class="btn btn-secondary" id="exchangeButton" href="{{ path('exchange_request_new') }}">{{ modalExchangeButton | default('Proposer un échange') }}</a>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ modalDismiss | default('Fermer')}}</button>

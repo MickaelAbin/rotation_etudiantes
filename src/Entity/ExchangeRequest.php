@@ -31,9 +31,9 @@ class ExchangeRequest
 
     /**
      * @ORM\OneToOne(targetEntity = Enrolment::class, inversedBy = "requestedExchange")
-     * @ORM\JoinColumn(name = "desired_enrolment_id", nullable = false, options = {"unsigned": true})
+     * @ORM\JoinColumn(name = "requested_enrolment_id", nullable = false, options = {"unsigned": true})
      */
-    private ?Enrolment $desiredEnrolment = null;
+    private ?Enrolment $requestedEnrolment = null;
 
     /**
      * @ORM\OneToOne(targetEntity = Enrolment::class, inversedBy = "proposedExchange")
@@ -70,14 +70,14 @@ class ExchangeRequest
         return $this;
     }
 
-    public function getDesiredEnrolment(): ?Enrolment
+    public function getRequestedEnrolment(): ?Enrolment
     {
-        return $this->desiredEnrolment;
+        return $this->requestedEnrolment;
     }
 
-    public function setDesiredEnrolment(Enrolment $desiredEnrolment): self
+    public function setRequestedEnrolment(Enrolment $requestedEnrolment): self
     {
-        $this->desiredEnrolment = $desiredEnrolment;
+        $this->requestedEnrolment = $requestedEnrolment;
         return $this;
     }
 

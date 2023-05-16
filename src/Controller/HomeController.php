@@ -80,26 +80,28 @@ class HomeController extends AbstractController
     public function calendar(EnrolmentRepository $enrolmentRepository, AcademicLevel $academicLevel = null): Response
     {
         $academicLevelList = $this->academicLevelList;
-        $events = $enrolmentRepository->listByAcademicLevelCalendrier($academicLevel->getId());
-        $creneaux = [];
-        foreach ($events as $event) {
-            $creneaux[] = [
-                'id' => $event->getId(),
-                'date' => $event->getDate()->format('Y-m-d'),
-                'title' => $event->getClinicalRotationCategory()->getStartTime()->format('H') . 'h ' . $event->getStudent(),
-                'backgroundColor' => $event->getClinicalRotationCategory()->getColor(),
+        $enrolments = $enrolmentRepository->findEnrolmentsByAcademicLevel($academicLevel->getId());
+
+        $fullCalendarData = [];
+        foreach ($enrolments as $enrolment) {
+            $fullCalendarData[] = [
+                'id' => $enrolment->getId(),
+                'date' => $enrolment->getDate()->format('Y-m-d'),
+                'title' => $enrolment->getClinicalRotationCategory()->getStartTime()->format('H') . 'h ' . $enrolment->getStudent(),
+                'backgroundColor' => $enrolment->getClinicalRotationCategory()->getColor(),
                 'extendedProps' => [
-                    'student' => (string) $event->getStudent(),
-                    'academicLevel' => $event->getStudent()->getAcademicLevel()->getLabel(),
-                    'clinicalRotationCategory' => $event->getClinicalRotationCategory()->getLabel(),
-                    'startTime' => $event->getClinicalRotationCategory()->getStartTime()->format('H'),
-                    'endTime' => $event->getClinicalRotationCategory()->getEndTime()->format('H'),
+                    'student' => (string) $enrolment->getStudent(),
+                    'academicLevel' => $enrolment->getStudent()->getAcademicLevel()->getLabel(),
+                    'clinicalRotationCategory' => $enrolment->getClinicalRotationCategory()->getLabel(),
+                    'startTime' => $enrolment->getClinicalRotationCategory()->getStartTime()->format('H'),
+                    'endTime' => $enrolment->getClinicalRotationCategory()->getEndTime()->format('H'),
                 ]
             ];
         }
 
-        $data = json_encode($creneaux);
-        return $this->render('home/calendar.html.twig', compact('data','academicLevel', 'academicLevelList'));
+        $data = json_encode($fullCalendarData);
+
+        return $this->render('home/calendar.html.twig', compact('data','academicLevel', 'academicLevelList', 'enrolments'));
     }
 
     /**
@@ -156,7 +158,7 @@ class HomeController extends AbstractController
                 'academicLevelList' => $this->academicLevelList,
                 'academicLevel' => $academicLevel,
                 'endDate' => null,
-                'firstDate'=>null,
+                'firstDate' => null,
                 'message' => 'Aucun calendrier universitaire n\'a été trouvé pour cet AcademicLevel. Veuillez créer un calendrier universitaire.',
                 'universityCalendar' => null,
             ]);

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\AcademicLevel;
 use App\Entity\ClinicalRotationCategory;
 use App\Entity\Enrolment;
+use App\Entity\ExchangeRequest;
 use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -43,12 +44,16 @@ class EnrolmentRepository extends ServiceEntityRepository
         }
     }
 
-    public function listByAcademicLevelCalendrier(int $academicLevelID)
+    public function findEnrolmentsByAcademicLevel(int $academicLevelID)
     {
         return $this->createQueryBuilder('enrolment')
-//            ->select('student', 'enrolment', 'category')
+//            ->select('student', 'enrolment', 'category', 'requestedExchange', 'proposedExchange')
             ->innerJoin(Student::class,'student', Join::WITH, 'student.moodleUserID = enrolment.student')
             ->innerJoin(ClinicalRotationCategory::class,'category', Join::WITH, 'enrolment.clinicalRotationCategory = category.id')
+            ->leftJoin(ExchangeRequest::class, 'requestedExchange', Join::WITH,
+                'enrolment.id = requestedExchange.requestedEnrolment AND requestedExchange.isAccepted != 1')
+            ->leftJoin(ExchangeRequest::class, 'proposedExchange', Join::WITH,
+                'enrolment.id = proposedExchange.proposedEnrolment AND proposedExchange.isAccepted != 1')
             ->where('student.academicLevel = :academic_level_id')
             ->setParameter('academic_level_id', $academicLevelID)
             ->getQuery()

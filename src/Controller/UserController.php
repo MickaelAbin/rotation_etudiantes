@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 class UserController extends AbstractController
 {
     /**
-    * @Route(path = "/login/{id}", requirements={"id" = "^\d+$"}, name = "login", methods = {"GET"})
+    * @Route(path = "/login/{id}", requirements = {"id" = "^\d+$"}, name = "login", methods = {"GET"})
     */
     public function login(Request $request, UserAuthenticatorInterface $userAuthenticator, AuthenticatorInterface $authenticator,
                          UserRepository $userRepository, int $id): ?Response
