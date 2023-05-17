@@ -28,9 +28,9 @@ class AdminCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('moodleUserID', 'ID Moodle'),
             TextField::new('firstName', 'Prénom'),
             TextField::new('lastName', 'Nom'),
+            IdField::new('moodleUserID', 'ID Moodle'),
             ArrayField::new('roles', 'Rôles')->hideWhenCreating()->setPermission('ROLE_SUPER_ADMIN'),
         ];
     }

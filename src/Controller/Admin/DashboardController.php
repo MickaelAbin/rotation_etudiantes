@@ -5,8 +5,10 @@ namespace App\Controller\Admin;
 use App\Entity\AcademicLevel;
 use App\Entity\Admin;
 use App\Entity\ClinicalRotationCategory;
+use App\Entity\Enrolment;
 use App\Entity\Student;
 use App\Entity\UniversityCalendar;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -54,7 +56,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Plannings de gardes');
         yield MenuItem::linkToRoute('Attribution des gardes', 'fas fa-list', 'enrolment_allocation', ['id' => 2]);
-        // yield MenuItem::linkToUrl('Attribution des gardes ', '', '/enrolment/allocation/2');
+        yield MenuItem::linkToCrud('Créneau d\'urgence', 'fas fa-first-aid', Enrolment::class)->setAction(Action::NEW);
 
         yield MenuItem::section('Super Admin')->setPermission('ROLE_SUPER_ADMIN');
         yield MenuItem::linkToCrud('Niveaux académiques', 'fas fa-graduation-cap', AcademicLevel::class)->setPermission('ROLE_SUPER_ADMIN');

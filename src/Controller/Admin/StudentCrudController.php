@@ -33,7 +33,6 @@ class StudentCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Étudiant')
             ->setEntityLabelInPlural('Étudiants')
             ->setPaginatorPageSize(30)
-            //->setDefaultSort(['moodleUserID' => 'ASC'])
             ;
     }
 

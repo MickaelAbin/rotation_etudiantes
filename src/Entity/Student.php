@@ -45,7 +45,7 @@ class Student extends User
 
     public function __toString()
     {
-        return parent::__toString();
+        return parent::__toString() . ' (' . $this->academicLevel . ')';
     }
 
     /**

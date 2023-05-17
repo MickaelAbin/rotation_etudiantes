@@ -42,7 +42,7 @@ window.onload = () => {
             let modalCategory = document.getElementById('enrolmentCategory')
             let modalTime = document.getElementById('enrolmentTime')
 
-            modalTitle.innerText = info.event.extendedProps.student + ' (' + info.event.extendedProps.academicLevel + ')'
+            modalTitle.innerText = info.event.extendedProps.student
             modalDate.innerText = 'Date : ' + info.event.start.toLocaleDateString('fr-FR', {day: 'numeric', month: 'long', year: 'numeric'})
             modalCategory.innerText = 'Service : ' + info.event.extendedProps.clinicalRotationCategory
             modalTime.innerText = 'De ' + info.event.extendedProps.startTime + 'h à ' + info.event.extendedProps.endTime + 'h'

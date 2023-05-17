@@ -13,8 +13,8 @@ class TwigExtension extends AbstractExtension
     public function getTests(): array
     {
         return [
-            new TwigTest('instanceOfStudent', function(User $user) { return $user instanceof Student; }),
-            new TwigTest('instanceOfAdmin', function(User $user) {return$user instanceof Admin; })
+            new TwigTest('instanceOfStudent', function(?User $user) { return $user instanceof Student; }),
+            new TwigTest('instanceOfAdmin', function(?User $user) {return$user instanceof Admin; })
         ];
     }
 }

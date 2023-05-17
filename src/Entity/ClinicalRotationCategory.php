@@ -78,7 +78,7 @@ class ClinicalRotationCategory
 
     public function __toString()
     {
-        return 'catégorie de garde ' . $this->label;
+        return $this->academicLevel->getLabel() . ' - ' . $this->label;
     }
 
     public function getId(): ?int
