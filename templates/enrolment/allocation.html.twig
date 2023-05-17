@@ -1,11 +1,22 @@
-{% extends 'base.html.twig' %}
-{% block title %}{{ parent() }}{% endblock %}
-{% block h2 %}Attribution des gardes{% endblock %}
+{% extends '@EasyAdmin/layout.html.twig' %}
 
-{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% block content_title %}
+    Attribution automatique des gardes
+{% endblock %}
 
 {% block main %}
-    {{ include('_academic_level_filter.html.twig') }}
+    {% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+    <div class="d-flex justify-content-center">
+        <ul class="nav nav-pills">
+            {% for element in academicLevelList %}
+                <li class="nav-item">
+                    <a class="nav-link {{ academicLevel.id == element.id ? 'active' }}" href="{{ ea_url().setRoute('enrolment_allocation', {'id': element.id}) }}">{{ element.label }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-6 offset-md-3">
