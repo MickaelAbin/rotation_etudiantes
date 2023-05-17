@@ -31,7 +31,7 @@ class HomeController extends AbstractController
 
         if ($user instanceof Admin)
         {
-            return $this->render('home/home_admin.html.twig');
+            return $this->redirectToRoute('admin');
         }
 
         if ($user instanceof Student)

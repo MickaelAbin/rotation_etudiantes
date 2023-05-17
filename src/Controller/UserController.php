@@ -21,17 +21,6 @@ class UserController extends AbstractController
     public function login(Request $request, UserAuthenticatorInterface $userAuthenticator, AuthenticatorInterface $authenticator,
                          UserRepository $userRepository, int $id): ?Response
     {
-        // TODO supprimer ghost code
-        // id Super Admin
-        //$request->getSession()->set('moodleID', 12346);
-        // id Admin
-//        $request->getSession()->set('moodleID', 12346);
-
-        // id Etudiant
-        // $request->getSession()->set('moodleID', 15018);
-        // $id = $request->getSession()->get('moodleID');
-
-
         // check si l'utilisateur est en DB, puis l'authentifie (cf. app/Security/Authenticator.php)
         $user = $userRepository->findByID($id);
         if($user !== null) {

@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\Admin;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +51,11 @@ class Authenticator extends AbstractAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
+
+        if ($request->getUser() instanceof Admin) {
+            return new RedirectResponse('/admin');
+        }
+
         return new RedirectResponse('/');
     }
 
