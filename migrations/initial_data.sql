@@ -40,3 +40,7 @@ INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, 
     VALUES (4, 'SI jour WE', '08:30:00', '18:00:00', 2, 1, null);
 INSERT INTO clinical_rotation_categories (academic_level_id, label, start_time, end_time, nb_students, is_on_weekend, color)
     VALUES (4, 'SI nuit WE', '18:00:00', '24:00:00', 1, 1, null);
+
+-- Insert admins
+INSERT INTO admins (moodle_user_id, first_name, last_name, roles)
+    VALUES (7, 'Frédéric', 'Auffray', '["ROLE_SUPER_ADMIN"]');
