@@ -114,7 +114,8 @@ class EnrolmentController extends AbstractController
 
         // Récupération de la date du dernier enrolment pour l'AcademicLevel
         $firstEnrolment = $enrolmentRepository->findLastEnrolmentForAcademicLevel($academicLevel->getId());
-        $firstDate = $firstEnrolment ? $firstEnrolment->getDate()->add(new DateInterval('P1D')) : $universityCalendar->getStartDate();
+        $firstDate = $firstEnrolment ? $firstEnrolment->getDate()
+            ->add(new DateInterval('P1D')) : $universityCalendar->getStartDate();
 
         $formBuilder = $formFactory->createBuilder()
             ->add('endDate', DateType::class, [
@@ -133,15 +134,51 @@ class EnrolmentController extends AbstractController
 
             $availableDays = $guardScheduler->createAvailableDaysArray($academicLevel->getId(),$firstDate,$endDate);
 
+            $weekendDays = [];
+            $weekDays = [];
+
             foreach ($availableDays as $day) {
                 $isWeekend = $day->format('N') >= 6; // Le samedi (6) et dimanche (7) sont considérés comme des week-ends
 
                 if (in_array($day, $holidaysDates)) { // Si le jour est un jour férié, on le remplit avec des créneaux du week-end
                     $isWeekend = true;
+                    $weekendDays[] = $day; // Ajouter le jour férié au tableau des jours de week-end
+                } elseif ($isWeekend) {
+                    $weekendDays[] = $day; // Ajouter le jour au tableau des jours de week-end
+                } else {
+                    $weekDays[] = $day; // Ajouter le jour au tableau des jours de semaine
                 }
+            }
+
+            // Remplir les créneaux du week-end
+            foreach ($weekendDays as $day) {
+                $isWeekend = true;
 
                 foreach ($clinicalRotationCategories as $category) {
-                    if ($category->isIsOnWeekend() === $isWeekend) { // création des enrolments pour les jours de la semaine ou les week-ends
+                    if ($category->isIsOnWeekend() === $isWeekend) {
+                        $categoryStudentsCount = $category->getNbStudents();
+                        $studentIndex = $lastStudentIndex % $nbStudents;
+
+                        for ($i = 0; $i < $categoryStudentsCount; $i++) {
+                            $enrolment = new Enrolment();
+                            $enrolment->setDate($day);
+                            $enrolment->setClinicalRotationCategory($category);
+                            $enrolment->setStudent($students[$studentIndex]);
+                            $entityManager->persist($enrolment);
+
+                            $lastStudentIndex++;
+                            $studentIndex = $lastStudentIndex % $nbStudents;
+                        }
+                    }
+                }
+            }
+
+            // Remplir les créneaux de la semaine
+            foreach ($weekDays as $day) {
+                $isWeekend = false;
+
+                foreach ($clinicalRotationCategories as $category) {
+                    if ($category->isIsOnWeekend() === $isWeekend) {
                         $categoryStudentsCount = $category->getNbStudents();
                         $studentIndex = $lastStudentIndex % $nbStudents;
 
