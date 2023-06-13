@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\Admin;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,15 +49,13 @@ class Authenticator extends AbstractAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
-        }
+        $url = $this->urlGenerator->generate('home');
 
         if ($request->getUser() instanceof Admin) {
-            return new RedirectResponse('/admin');
+            $url = $this->urlGenerator->generate('admin');
         }
 
-        return new RedirectResponse('/');
+        return new RedirectResponse($url);
     }
 
     /**

@@ -62,6 +62,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Niveaux académiques', 'fas fa-graduation-cap', AcademicLevel::class)->setPermission('ROLE_SUPER_ADMIN');
 
         yield MenuItem::section();
-        yield MenuItem::linkToUrl('Retour au site', 'fa fa-home', '/calendar/');
+        yield MenuItem::linkToRoute('Retour au site', 'fa fa-home', 'calendar', ['id' => 2]);
     }
 }

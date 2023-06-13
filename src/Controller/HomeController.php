@@ -46,7 +46,7 @@ class HomeController extends AbstractController
     /**
      * @Route(path = "/calendar/{id<[2,3,4,5,6]>}", defaults = {"id": 2}, name = "calendar", methods = {"GET"})
      */
-    public function calendar(EnrolmentRepository $enrolmentRepository, AcademicLevel $academicLevel = null): Response
+    public function calendar(EnrolmentRepository $enrolmentRepository, AcademicLevel $academicLevel): Response
     {
         $academicLevelList = $this->academicLevelList;
         $enrolments = $enrolmentRepository->findEnrolmentsByAcademicLevel($academicLevel->getId());
