@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block h2 %}Echange de garde{% endblock %}
+{% block main %}
+    <div class="d-flex flex-column align-items-center">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+        <a href="{{ path('home') }}">back to list</a>
+    </div>
+<p>gijeiojgiejigj {{ app.request.user }}</p>
+{% endblock %}

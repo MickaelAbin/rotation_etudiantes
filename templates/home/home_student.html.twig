@@ -17,6 +17,7 @@
                     </thead>
                     <tbody>
                         {% for enrolment in app.user.enrolments %}
+
                             <tr>
                                 <td>{{ enrolment.date | date('l j F Y') | replace({'Monday': 'Lundi', 'Tuesday': 'Mardi', 'Wednesday': 'Mercredi', 'Thursday': 'Jeudi', 'Friday': 'Vendredi', 'Saturday': 'Samedi', 'Sunday': 'Dimanche', 'January': 'Janvier', 'February': 'Février', 'March': 'Mars', 'April': 'Avril', 'May': 'Mai', 'June': 'Juin', 'July': 'Juillet', 'August': 'Août', 'September': 'Septembre', 'October': 'Octobre', 'November': 'Novembre', 'December': 'Décembre'})}}</td>
                                 <td>{{ enrolment.clinicalRotationCategory.label }}</td>
@@ -24,7 +25,6 @@
                             </tr>
                         {% endfor %}
                     </tbody>
-
                 </table>
             </div>
         {% else %}
@@ -46,6 +46,6 @@
 
 
 
-{{ include('_modal.html.twig', {modalTitle: 'Test'}) }}
+{#{{ include('_modal.html.twig', {modalTitle: 'Test'}) }}#}
 
 {% endblock %}

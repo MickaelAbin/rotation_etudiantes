@@ -41,7 +41,10 @@ class ExchangeRequest
      */
     private ?Enrolment $proposedEnrolment = null;
 
-
+    public function __toString(): string
+    {
+        return '';
+    }
 
     public function getId(): ?int
     {

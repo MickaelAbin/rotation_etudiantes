@@ -28,7 +28,7 @@ class HomeController extends AbstractController
     public function home(): Response
     {
         $user = $this->getUser();
-
+//        dump($user);
         if ($user instanceof Admin)
         {
             return $this->redirectToRoute('admin');
@@ -52,6 +52,7 @@ class HomeController extends AbstractController
         $enrolments = $enrolmentRepository->findEnrolmentsByAcademicLevel($academicLevel->getId());
 
         $fullCalendarData = [];
+
         foreach ($enrolments as $enrolment) {
             $fullCalendarData[] = [
                 'id' => $enrolment->getId(),
@@ -67,7 +68,6 @@ class HomeController extends AbstractController
                 ]
             ];
         }
-
         $data = json_encode($fullCalendarData);
 
         return $this->render('home/calendar.html.twig', compact('data','academicLevel', 'academicLevelList', 'enrolments'));

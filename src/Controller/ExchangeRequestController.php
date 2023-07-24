@@ -8,6 +8,7 @@ use App\Form\ExchangeRequestType;
 use App\Repository\EnrolmentRepository;
 use App\Repository\ExchangeRequestRepository;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,21 +26,26 @@ class ExchangeRequestController extends AbstractController
     /**
      * @Route(path  = "new", name = "new", methods = {"GET", "POST"})
      */
-    public function new(Request $request, ExchangeRequestRepository $exchangeRequestRepository, EnrolmentRepository $enrolmentRepository): Response
+    public function new(Request $request, ExchangeRequestRepository $exchangeRequestRepository, EnrolmentRepository $enrolmentRepository, EntityManagerInterface $entityManager): Response
     {
         $exchangeRequest = new ExchangeRequest();
 
-        // récupère l'ID de l'Enrolment mis en session dans calendar.js
-        $id = $request->getSession()->get('requestedEnrolmentID');
+        $enrolment = $entityManager->find(Enrolment::class, $this->getUser()->getUserIdentifier());
+        //On initialise le formulaire
+        $exchangeRequestForm = $this->createForm(ExchangeRequestType::class, $exchangeRequest);
+        //On traite le formulaire
+        $exchangeRequestForm->handleRequest($request);
+//        // récupère l'ID de l'Enrolment mis en session dans calendar.js
+//        $id = $request->getSession()->get('requestedEnrolmentID');
+//
+//        if ($id != null) {
+//            $exchangeRequest->setRequestedEnrolment($enrolmentRepository->find($id));
+//        }
+//
+//        $form = $this->createForm(ExchangeRequestType::class, $exchangeRequest);
+//        $form->handleRequest($request);
 
-        if ($id != null) {
-            $exchangeRequest->setRequestedEnrolment($enrolmentRepository->find($id));
-        }
-
-        $form = $this->createForm(ExchangeRequestType::class, $exchangeRequest);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($exchangeRequestForm->isSubmitted() && $exchangeRequestForm->isValid()) {
             $exchangeRequestRepository->add($exchangeRequest, true);
             $this->addFlash('success', 'Votre demande d\'échange a bien été envoyée !');
             return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
@@ -47,42 +53,65 @@ class ExchangeRequestController extends AbstractController
 
         return $this->renderForm('exchange_request/new.html.twig', [
             'exchange_request' => $exchangeRequest,
-            'form' => $form,
+            'exchangeRequestForm' => $exchangeRequestForm,
         ]);
+
     }
 
 
     /**
-     * @Route("/{id}/edit", name="app_exchange_request_edit", methods={"GET", "POST"})
+     * @Route("afficher", name="afficherEnrolment", methods={"GET", "POST"})
      */
-    public function edit(Request $request, ExchangeRequest $exchangeRequest, ExchangeRequestRepository $exchangeRequestRepository): Response
+    public function afficherEnrolment(Request $request, ExchangeRequestRepository $exchangeRequestRepository, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ExchangeRequestType::class, $exchangeRequest);
-        $form->handleRequest($request);
+        $exchangeRequest = new ExchangeRequest();
+        $enrolment = new Enrolment();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $exchangeRequestRepository->add($exchangeRequest, true);
+        if($this->getUser() === $enrolment->getStudent()->getMoodleUserId()){
+            $enrolment->setStudent($enrolment->getStudent()->getFirstName());
+            $enrolment->setStudent($enrolment->getStudent()->getLastName());
+            $enrolment->setClinicalRotationCategory($enrolment->getClinicalRotationCategory()->getLabel());
+            $enrolment->setClinicalRotationCategory($enrolment->getClinicalRotationCategory()->getStartTime());
+            $enrolment->setClinicalRotationCategory($enrolment->getClinicalRotationCategory()->getEndTime());
+            //On initialise le formulaire
+            $exchangeRequestForm = $this->createForm(ExchangeRequestType::class, $exchangeRequest);
+            //On traite le formulaire
+            $exchangeRequestForm->handleRequest($request);
 
-            return $this->redirectToRoute('app_exchange_request_index', [], Response::HTTP_SEE_OTHER);
+            $enrolment = $entityManager->find(Enrolment::class, $this->getUser()->getUserIdentifier());
+            //On initialise le formulaire
+            $exchangeRequestForm = $this->createForm(ExchangeRequestType::class, $exchangeRequest);
+            //On traite le formulaire
+            $exchangeRequestForm->handleRequest($request);
+
+            //Si le formulaire est valide
+            if ($exchangeRequestForm->isSubmitted() && $exchangeRequestForm->isValid()) {
+
+                $exchangeRequestRepository->add($exchangeRequest, true);
+
+                return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+            }
+
+            return $this->renderForm('exchange_request/afficher.html.twig.html.twig', [
+                'exchange_request' => $exchangeRequest,
+                'form' => $exchangeRequestForm,
+            ]);
         }
 
-        return $this->renderForm('exchange_request/edit.html.twig', [
-            'exchange_request' => $exchangeRequest,
-            'form' => $form,
-        ]);
+
     }
 
-    /**
-     * @Route("/{id}", name="app_exchange_request_delete", methods={"POST"})
-     */
-    public function delete(Request $request, ExchangeRequest $exchangeRequest, ExchangeRequestRepository $exchangeRequestRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$exchangeRequest->getId(), $request->request->get('_token'))) {
-            $exchangeRequestRepository->remove($exchangeRequest, true);
-        }
-
-        return $this->redirectToRoute('app_exchange_request_index', [], Response::HTTP_SEE_OTHER);
-    }
+//    /**
+//     * @Route("/{id}", name="delete", methods={"POST"})
+//     */
+//    public function delete(Request $request, ExchangeRequest $exchangeRequest, ExchangeRequestRepository $exchangeRequestRepository): Response
+//    {
+//        if ($this->isCsrfTokenValid('delete'.$exchangeRequest->getId(), $request->request->get('_token'))) {
+//            $exchangeRequestRepository->remove($exchangeRequest, true);
+//        }
+//
+//        return $this->redirectToRoute('app_exchange_request_index', [], Response::HTTP_SEE_OTHER);
+//    }
 
     public function isEnrolmentEligibleForExchange(Enrolment $enrolment): bool
     {

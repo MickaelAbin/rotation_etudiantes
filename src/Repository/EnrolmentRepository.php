@@ -71,4 +71,10 @@ class EnrolmentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+//    public function findEnrolmentStudent()
+//    {
+//        $query = $this->createQueryBuilder("e");
+//        $query->where('e.student')
+//    }
 }

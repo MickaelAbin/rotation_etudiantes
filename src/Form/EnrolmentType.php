@@ -22,13 +22,18 @@ class EnrolmentType extends AbstractType
                 'widget' => 'single_text',
                 'label'=> 'Date ',
             ])
-//            ->add('requestedExchange')
-//            ->add('proposedExchange',EntityType::class,[
-//                'class'=>Enrolment::class,
-//                'choice_label'=> function (Enrolment $enrolment) {
-//                    return $enrolment->getStudent()->getFirstName(). ' ' .$enrolment->getStudent()->getLastName() . ' ' . $enrolment->getClinicalRotationCategory()->getLabel(). ' ' . $enrolment->getDate()->format('j/m/Y');},
-//                'label'=>'Proposition : ',
+//            ->add('requestedExchange',EntityType::class,[
+//                'class' => Enrolment::class,
+//                'label' => function (Enrolment $enrolment) {
+//                return $enrolment;
+//                }
 //            ])
+////            ->add('proposedExchange',EntityType::class,[
+////                'class'=>Enrolment::class,
+////                'choice_label'=> function (Enrolment $enrolment) {
+////                    return $enrolment->getProposedExchange()->getProposedEnrolment(). ' ' .$enrolment->getStudent()->getLastName() . ' ' . $enrolment->getClinicalRotationCategory()->getLabel(). ' ' . $enrolment->getDate()->format('j/m/Y');},
+////                'label'=>'Proposition : ',
+////            ])
             ->add('clinicalRotationCategory',EntityType::class,[
                 'class'=>ClinicalRotationCategory::class,
                 'choice_label'=>'label',

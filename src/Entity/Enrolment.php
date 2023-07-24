@@ -46,6 +46,11 @@ class Enrolment
      */
     private ?Student $student = null;
 
+    public function __toString(): string
+    {
+        return $this->clinicalRotationCategory->getLabel() . $this->date->format('d/m/Y');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
