@@ -1,6 +1,6 @@
 # Clinical rotations
 Mise en place d'un logiciel de gestion des gardes étudiantes pour l'école vétérinaire ONIRIS.
-                Language : PHP Symfony / BDD : MySQL / Front: HTML, CSS, Javascript, Boostrap / IDE : PHPStorm
+                Langage : PHP Symfony / BDD : MySQL / Front: HTML, CSS, Javascript, Boostrap / IDE : PHPStorm
 
 
 ## Getting started
