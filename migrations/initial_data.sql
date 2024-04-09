@@ -1,5 +1,5 @@
 -- Initial DML for project clinical_rotations
-USE clinical_rotations;
+USE clinical;
 
 -- Insert academic_levels
 INSERT INTO academic_levels (id, label) VALUES (2, 'Vet 2');
